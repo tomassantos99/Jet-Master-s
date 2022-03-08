@@ -1,2 +1,2 @@
-# Jet-Masters
+# Jetpack-Masters
 Endless Scroller
