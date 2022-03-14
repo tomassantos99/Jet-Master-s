@@ -6,6 +6,8 @@ public class StudentController : MonoBehaviour
 {
 
     public float jetpackForce = 75.0f;
+    public float forwardMovementSpeed = 3.0f;
+
     private Rigidbody2D playerRigidbody;
 
     // Start is called before the first frame update
@@ -27,5 +29,8 @@ public class StudentController : MonoBehaviour
         {
             playerRigidbody.AddForce(new Vector2(0, jetpackForce));
         }
+        Vector2 newVelocity = playerRigidbody.velocity;
+        newVelocity.x = forwardMovementSpeed;
+        playerRigidbody.velocity = newVelocity;
     }
 }
