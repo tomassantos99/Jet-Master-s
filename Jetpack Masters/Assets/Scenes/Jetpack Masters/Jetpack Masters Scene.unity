@@ -5084,6 +5084,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   jetpackForce: 75
   forwardMovementSpeed: 5
+  mainJetpack: {fileID: 234375883}
+  miniJetpack: {fileID: 2054925630}
   groundCheckTransform: {fileID: 262078684}
   groundCheckLayerMask:
     serializedVersion: 2
@@ -5128,8 +5130,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   availableRooms:
   - {fileID: 4448502955600208794, guid: fb44b6c60056e7e4b94af8c5bde9d733, type: 3}
-  currentRooms:
-  - {fileID: 4448502955600208794, guid: fb44b6c60056e7e4b94af8c5bde9d733, type: 3}
+  firstRoom: {fileID: 4448502955600208794, guid: fb44b6c60056e7e4b94af8c5bde9d733, type: 3}
 --- !u!114 &688445469
 MonoBehaviour:
   m_ObjectHideFlags: 0

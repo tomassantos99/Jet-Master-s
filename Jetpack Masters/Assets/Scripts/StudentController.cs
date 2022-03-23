@@ -7,6 +7,8 @@ public class StudentController : MonoBehaviour
 
     public float jetpackForce = 75.0f;
     public float forwardMovementSpeed = 3.0f;
+    public ParticleSystem mainJetpack;
+    public ParticleSystem miniJetpack;
 
     private Rigidbody2D playerRigidbody;
 
@@ -40,6 +42,7 @@ public class StudentController : MonoBehaviour
         playerRigidbody.velocity = newVelocity;
 
         UpdateGroundedStatus();
+        AdjustJetpack(jetpackActive);
     }
 
     void UpdateGroundedStatus()
@@ -48,5 +51,23 @@ public class StudentController : MonoBehaviour
         isGrounded = Physics2D.OverlapCircle(groundCheckTransform.position, 0.1f, groundCheckLayerMask);
         //2
         mouseAnimator.SetBool("isGrounded", isGrounded);
+    }
+
+    void AdjustJetpack(bool jetpackActive)
+    {
+        var mainJetpackEmission = mainJetpack.emission;
+        var miniJetpackEmission = miniJetpack.emission;
+        mainJetpackEmission.enabled = !isGrounded;
+        miniJetpackEmission.enabled = !isGrounded;
+        if (jetpackActive)
+        {
+            mainJetpackEmission.rateOverTime = 300.0f;
+            miniJetpackEmission.rateOverTime = 300.0f;
+        }
+        else
+        {
+            mainJetpackEmission.rateOverTime = 75.0f;
+            miniJetpackEmission.rateOverTime = 300.0f;
+        }
     }
 }

@@ -1,17 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Text.RegularExpressions;
 
 public class Generator : MonoBehaviour
 {
 
     public GameObject[] availableRooms;
-    public List<GameObject> currentRooms;
+    public GameObject firstRoom;
+    private List<GameObject> currentRooms;
     private float screenWidthInPoints;
 
     // Start is called before the first frame update
     void Start()
     {
+        currentRooms = new List<GameObject>();
+        currentRooms.Add(Instantiate(firstRoom));
         float height = 2.0f * Camera.main.orthographicSize;
         screenWidthInPoints = height * Camera.main.aspect;
         StartCoroutine(GeneratorCheck());
