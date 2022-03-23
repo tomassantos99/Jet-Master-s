@@ -12,7 +12,7 @@ TagManager:
   - Water
   - UI
   - 
-  - 
+  - Ground
   - 
   - 
   - 
@@ -43,6 +43,12 @@ TagManager:
     locked: 0
   - name: Background
     uniqueID: 2464446877
+    locked: 0
+  - name: Zapper
+    uniqueID: 1317660103
+    locked: 0
+  - name: ZapperEnd
+    uniqueID: 2912157743
     locked: 0
   - name: Player
     uniqueID: 903963673

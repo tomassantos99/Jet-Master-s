@@ -10,9 +10,15 @@ public class StudentController : MonoBehaviour
 
     private Rigidbody2D playerRigidbody;
 
+    public Transform groundCheckTransform;
+    private bool isGrounded;
+    public LayerMask groundCheckLayerMask;
+    private Animator mouseAnimator;
+
     // Start is called before the first frame update
     void Start()
     {
+        mouseAnimator = GetComponent<Animator>();
         playerRigidbody = GetComponent<Rigidbody2D>();
     }
 
@@ -32,5 +38,15 @@ public class StudentController : MonoBehaviour
         Vector2 newVelocity = playerRigidbody.velocity;
         newVelocity.x = forwardMovementSpeed;
         playerRigidbody.velocity = newVelocity;
+
+        UpdateGroundedStatus();
+    }
+
+    void UpdateGroundedStatus()
+    {
+        //1
+        isGrounded = Physics2D.OverlapCircle(groundCheckTransform.position, 0.1f, groundCheckLayerMask);
+        //2
+        mouseAnimator.SetBool("isGrounded", isGrounded);
     }
 }

@@ -194,7 +194,7 @@ ParticleSystemRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 903963673
-  m_SortingLayer: 2
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_RenderMode: 0
   m_SortMode: 0
@@ -4927,6 +4927,36 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     vectorLabel1_3: W
+--- !u!1 &262078683
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 262078684}
+  m_Layer: 0
+  m_Name: GroundCheck
+  m_TagString: Untagged
+  m_Icon: {fileID: 3936346786652291628, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &262078684
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 262078683}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.25, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 688445464}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &688445462
 GameObject:
   m_ObjectHideFlags: 0
@@ -4941,6 +4971,9 @@ GameObject:
   - component: {fileID: 688445466}
   - component: {fileID: 688445465}
   - component: {fileID: 688445468}
+  - component: {fileID: 688445469}
+  - component: {fileID: 688445470}
+  - component: {fileID: 688445471}
   m_Layer: 0
   m_Name: Student
   m_TagString: Untagged
@@ -4986,7 +5019,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 903963673
-  m_SortingLayer: 2
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_Sprite: {fileID: 2250577591358363633, guid: 898519281110dc44b9dfa687e8bf5e35, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -5012,6 +5045,7 @@ Transform:
   m_Children:
   - {fileID: 234375881}
   - {fileID: 2054925628}
+  - {fileID: 262078684}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -5050,6 +5084,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   jetpackForce: 75
   forwardMovementSpeed: 5
+  groundCheckTransform: {fileID: 262078684}
+  groundCheckLayerMask:
+    serializedVersion: 2
+    m_Bits: 128
 --- !u!61 &688445467
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -5092,6 +5130,57 @@ MonoBehaviour:
   - {fileID: 4448502955600208794, guid: fb44b6c60056e7e4b94af8c5bde9d733, type: 3}
   currentRooms:
   - {fileID: 4448502955600208794, guid: fb44b6c60056e7e4b94af8c5bde9d733, type: 3}
+--- !u!114 &688445469
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 688445462}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbddd1d10042f1b46bad4250d51d0636, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ammo: {fileID: 1464016573118478750, guid: 91d6b9eb65b109845a7551c20a483b91, type: 3}
+  currentAmmo: []
+--- !u!95 &688445470
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 688445462}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: c0d0667fdf55cd944a916e8c687b515e, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 1
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &688445471
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 688445462}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6428e1c5a4be68d40be63f487d17183a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  zappers:
+  - {fileID: 5341512474086339380, guid: 581a13bdd09850e43b44b007e2be3c24, type: 3}
+  - {fileID: 3383162866398315828, guid: c750d4f37125cc540afa872b797f6f5b, type: 3}
+  - {fileID: 6722069546381334200, guid: d7ca97b036bc41a41af822312e5f1462, type: 3}
+  currentZappers: []
+  currentPosition: 0
 --- !u!1 &984295432
 GameObject:
   m_ObjectHideFlags: 0
@@ -5260,7 +5349,7 @@ ParticleSystemRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 903963673
-  m_SortingLayer: 2
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_RenderMode: 0
   m_SortMode: 0
