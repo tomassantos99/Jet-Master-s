@@ -6,6 +6,7 @@ public class ZapperController : MonoBehaviour {
     public List<GameObject> zappers;
     public List<GameObject> currentZappers;
     public float currentPosition;
+    private Animator playerAnimator;
     // Start is called before the first frame update
     void Start() {
         currentPosition = 10.0f;
@@ -20,6 +21,8 @@ public class ZapperController : MonoBehaviour {
 
             currentZappers.Add(zap);
         }
+
+        playerAnimator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -29,8 +32,6 @@ public class ZapperController : MonoBehaviour {
 
     void FixedUpdate() {
         if(transform.position.x - currentZappers[0].transform.position.x > 10.0f) { 
-    	    int size  = Random.Range(0, 1);
-
             GameObject zap = currentZappers[0];
 
             currentZappers.RemoveAt(0);
@@ -44,6 +45,10 @@ public class ZapperController : MonoBehaviour {
             currentPosition += 10.0f;
 
             currentZappers.Add(zap);
+        }
+
+        if(GetComponent<Collider2D>().bounds.Intersects(currentZappers[0].GetComponent<Collider2D>().bounds)) { 
+            playerAnimator.SetBool("isDead", true);
         }
     }
 }

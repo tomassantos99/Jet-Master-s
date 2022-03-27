@@ -15,12 +15,12 @@ public class StudentController : MonoBehaviour
     public Transform groundCheckTransform;
     private bool isGrounded;
     public LayerMask groundCheckLayerMask;
-    private Animator mouseAnimator;
+    private Animator studentAnimator;
 
     // Start is called before the first frame update
     void Start()
     {
-        mouseAnimator = GetComponent<Animator>();
+        studentAnimator = GetComponent<Animator>();
         playerRigidbody = GetComponent<Rigidbody2D>();
     }
 
@@ -32,17 +32,32 @@ public class StudentController : MonoBehaviour
 
     void FixedUpdate()
     {
-        bool jetpackActive = Input.GetButton("Fire1");
-        if (jetpackActive)
-        {
-            playerRigidbody.AddForce(new Vector2(0, jetpackForce));
-        }
-        Vector2 newVelocity = playerRigidbody.velocity;
-        newVelocity.x = forwardMovementSpeed;
-        playerRigidbody.velocity = newVelocity;
+        bool jetpackActive = false;
+        if(!studentAnimator.GetBool("isDead")) {
+            jetpackActive = Input.GetButton("Fire1");
+            if (jetpackActive)
+            {
+                playerRigidbody.AddForce(new Vector2(0, jetpackForce));
+            }
+            Vector2 newVelocity = playerRigidbody.velocity;
+            newVelocity.x = forwardMovementSpeed;
+            playerRigidbody.velocity = newVelocity;
 
-        UpdateGroundedStatus();
-        AdjustJetpack(jetpackActive);
+            UpdateGroundedStatus();
+            AdjustJetpack(jetpackActive);
+        }
+        else {
+            var mainJetpackEmission = mainJetpack.emission;
+            var miniJetpackEmission = miniJetpack.emission;
+            mainJetpackEmission.enabled = false;
+            miniJetpackEmission.enabled = false;
+            if(transform.eulerAngles.z <= 270.0f && transform.eulerAngles.z > 10.0f) {
+                playerRigidbody.angularVelocity = 0.0f;
+                transform.eulerAngles = new Vector3(0,0,-90.0f);
+            }
+            else
+                playerRigidbody.angularVelocity = -150.0f;
+        }
     }
 
     void UpdateGroundedStatus()
@@ -50,7 +65,7 @@ public class StudentController : MonoBehaviour
         //1
         isGrounded = Physics2D.OverlapCircle(groundCheckTransform.position, 0.1f, groundCheckLayerMask);
         //2
-        mouseAnimator.SetBool("isGrounded", isGrounded);
+        studentAnimator.SetBool("isGrounded", isGrounded);
     }
 
     void AdjustJetpack(bool jetpackActive)
