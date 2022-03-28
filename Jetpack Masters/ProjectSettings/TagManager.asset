@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Ammo
   - Zapper
+  - Coins
   layers:
   - Default
   - TransparentFX

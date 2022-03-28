@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 using UnityEngine;
 
 public class StudentController : MonoBehaviour
@@ -17,6 +18,9 @@ public class StudentController : MonoBehaviour
     public LayerMask groundCheckLayerMask;
     private Animator studentAnimator;
 
+    private uint coins = 0;
+    public Text coinsCollectedLabel;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -27,13 +31,14 @@ public class StudentController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     void FixedUpdate()
     {
         bool jetpackActive = false;
-        if(!studentAnimator.GetBool("isDead")) {
+        if (!studentAnimator.GetBool("isDead"))
+        {
             jetpackActive = Input.GetButton("Fire1");
             if (jetpackActive)
             {
@@ -46,14 +51,16 @@ public class StudentController : MonoBehaviour
             UpdateGroundedStatus();
             AdjustJetpack(jetpackActive);
         }
-        else {
+        else
+        {
             var mainJetpackEmission = mainJetpack.emission;
             var miniJetpackEmission = miniJetpack.emission;
             mainJetpackEmission.enabled = false;
             miniJetpackEmission.enabled = false;
-            if(transform.eulerAngles.z <= 270.0f && transform.eulerAngles.z > 10.0f) {
+            if (transform.eulerAngles.z <= 270.0f && transform.eulerAngles.z > 10.0f)
+            {
                 playerRigidbody.angularVelocity = 0.0f;
-                transform.eulerAngles = new Vector3(0,0,-90.0f);
+                transform.eulerAngles = new Vector3(0, 0, -90.0f);
             }
             else
                 playerRigidbody.angularVelocity = -150.0f;
@@ -83,6 +90,22 @@ public class StudentController : MonoBehaviour
         {
             mainJetpackEmission.rateOverTime = 75.0f;
             miniJetpackEmission.rateOverTime = 300.0f;
+        }
+    }
+
+    void CollectCoin(Collider2D coinCollider)
+    {
+        coins++;
+        coinsCollectedLabel.text = coins.ToString();
+        Destroy(coinCollider.gameObject);
+    }
+
+    void OnTriggerEnter2D(Collider2D collider)
+    {
+        Debug.Log("SUH");
+        if (collider.gameObject.CompareTag("Coins"))
+        {
+            CollectCoin(collider);
         }
     }
 }
