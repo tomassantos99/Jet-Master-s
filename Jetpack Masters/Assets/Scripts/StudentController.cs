@@ -114,5 +114,9 @@ public class StudentController : MonoBehaviour
         {
             CollectCoin(collider);
         }
+        else if (collider.gameObject.CompareTag("Zapper")) {
+            Debug.Log("asd");
+            studentAnimator.SetBool("isDead", true);
+        }
     }
 }
