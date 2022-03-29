@@ -26,9 +26,15 @@ public class StudentController : MonoBehaviour
     private float distanceTravelled;
     public Text totalDistanceTravelledLabel;
 
+     GameObject shield;
+
+
+
     // Start is called before the first frame update
     void Start()
     {
+        shield = transform.Find("Shield").gameObject;
+
         studentAnimator = GetComponent<Animator>();
         playerRigidbody = GetComponent<Rigidbody2D>();
         initialPosition = studentTransform.position;
@@ -75,6 +81,18 @@ public class StudentController : MonoBehaviour
         totalDistanceTravelledLabel.text = distanceTravelled.ToString() + " m";
     }
 
+    void ActivateShield(){
+        shield.SetActive(true);
+    }
+
+    void DeactivateShield(){
+        shield.SetActive(false);
+    }
+
+    bool HasSHield(){
+        return shield.activeSelf;
+    }
+
     void UpdateGroundedStatus()
     {
         //1
@@ -116,7 +134,12 @@ public class StudentController : MonoBehaviour
         }
         else if (collider.gameObject.CompareTag("Zapper")) {
             Debug.Log("asd");
-            studentAnimator.SetBool("isDead", true);
+            if(HasSHield()){
+                DeactivateShield();
+            }else{
+                studentAnimator.SetBool("isDead", true);
+                playerRigidbody.freezeRotation = false;
+            }
         }
     }
 }
