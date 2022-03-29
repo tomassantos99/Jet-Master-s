@@ -117,6 +117,7 @@ public class StudentController : MonoBehaviour
         else if (collider.gameObject.CompareTag("Zapper")) {
             Debug.Log("asd");
             studentAnimator.SetBool("isDead", true);
+            playerRigidbody.freezeRotation = false;
         }
     }
 }
