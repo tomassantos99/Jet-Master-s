@@ -1,5 +1,0 @@
-sceneSetups:
-- path: Assets/Scenes/Jetpack Masters/Jetpack Masters Scene.unity
-  isLoaded: 1
-  isActive: 1
-  isSubScene: 0
