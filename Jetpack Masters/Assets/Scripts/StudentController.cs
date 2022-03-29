@@ -21,11 +21,17 @@ public class StudentController : MonoBehaviour
     private uint coins = 0;
     public Text coinsCollectedLabel;
 
+    public Transform studentTransform;
+    private Vector3 initialPosition;
+    private float distanceTravelled;
+    public Text totalDistanceTravelledLabel;
+
     // Start is called before the first frame update
     void Start()
     {
         studentAnimator = GetComponent<Animator>();
         playerRigidbody = GetComponent<Rigidbody2D>();
+        initialPosition = studentTransform.position;
     }
 
     // Update is called once per frame
@@ -65,6 +71,8 @@ public class StudentController : MonoBehaviour
             else
                 playerRigidbody.angularVelocity = -150.0f;
         }
+        distanceTravelled = Mathf.RoundToInt(Vector3.Distance(studentTransform.position, initialPosition));
+        totalDistanceTravelledLabel.text = distanceTravelled.ToString() + " m";
     }
 
     void UpdateGroundedStatus()
@@ -102,10 +110,13 @@ public class StudentController : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collider)
     {
-        Debug.Log("SUH");
         if (collider.gameObject.CompareTag("Coins"))
         {
             CollectCoin(collider);
+        }
+        else if (collider.gameObject.CompareTag("Zapper")) {
+            Debug.Log("asd");
+            studentAnimator.SetBool("isDead", true);
         }
     }
 }

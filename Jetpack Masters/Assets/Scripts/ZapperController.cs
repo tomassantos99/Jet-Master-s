@@ -13,11 +13,7 @@ public class ZapperController : MonoBehaviour {
         currentZappers = new List<GameObject>();
 
         for(int i = 0; i < 3; i++) {
-            GameObject zap = (GameObject)Instantiate(zappers[Random.Range(0, 3)]);
-
-            zap.transform.position = new Vector3(currentPosition, 0.0f, 0.0f);
-
-            currentPosition += 10.0f;
+            GameObject zap = GenerateZapper();
 
             currentZappers.Add(zap);
         }
@@ -38,17 +34,63 @@ public class ZapperController : MonoBehaviour {
 
             Destroy(zap);
 
-            zap = (GameObject)Instantiate(zappers[Random.Range(0, 3)]);
-
-            zap.transform.position = new Vector3(currentPosition, 0.0f, 0.0f);
-
-            currentPosition += 10.0f;
+            zap = GenerateZapper();
 
             currentZappers.Add(zap);
         }
+    }
 
-        if(GetComponent<Collider2D>().bounds.Intersects(currentZappers[0].GetComponent<Collider2D>().bounds)) { 
-            playerAnimator.SetBool("isDead", true);
+    GameObject GenerateZapper() {
+        GameObject zap = (GameObject)Instantiate(zappers[Random.Range(0, 3)]);
+
+        zap.transform.position = new Vector3(currentPosition, 0.0f, 0.0f);
+
+        int rotation = Random.Range(0, 4);
+        zap.transform.eulerAngles = new Vector3(0, 0, 45.0f * rotation);
+
+        Vector3 position = zap.transform.position;
+
+        float colliderHight = zap.GetComponent<BoxCollider2D>().size.y;
+        float colliderWidth = zap.GetComponent<BoxCollider2D>().size.x;
+    
+        switch(Random.Range(0, 4)) { 
+            case 0:
+                switch(rotation) {
+                    case 0:
+                        position += new Vector3(0, colliderHight/2 - 2.53f, 0);
+                        zap.transform.position = position;
+                    break;
+                    case 2:
+                        position += new Vector3(0, colliderWidth/2 - 2.53f, 0);
+                        zap.transform.position = position;
+                    break;
+                    default:
+                        position += new Vector3(0, colliderHight/2*Mathf.Cos(Mathf.PI/4) - 2.53f, 0);
+                        zap.transform.position = position;
+                    break;
+                }
+            break;
+            case 1:
+                switch(rotation) {
+                    case 0:
+                        position -= new Vector3(0, colliderHight/2 - 2.48f, 0);
+                        zap.transform.position = position;
+                    break;
+                    case 2:
+                        position -= new Vector3(0, colliderWidth/2 - 2.48f, 0);
+                        zap.transform.position = position;
+                    break;
+                    default:
+                        position -= new Vector3(0, colliderHight/2*Mathf.Cos(Mathf.PI/4) - 2.48f, 0);
+                        zap.transform.position = position;
+                    break;
+                }
+            break;
+            default:
+            break;
         }
+         currentPosition += 10.0f;
+
+        return zap;
     }
 }
