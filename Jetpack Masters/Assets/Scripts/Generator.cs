@@ -11,7 +11,8 @@ public class Generator : MonoBehaviour
     private List<GameObject> currentRooms;
     private float screenWidthInPoints;
 
-    public GameObject[] availableObjects;
+    public GameObject[] coinsObjects;
+    public GameObject[] powerUpObjects;
     public List<GameObject> objects;
 
     public float objectsMinDistance = 5.0f;
@@ -105,9 +106,22 @@ public class Generator : MonoBehaviour
 
     void AddObject(float lastObjectX)
     {
-        int randomIndex = Random.Range(0, availableObjects.Length);
+        int randomObjectIndex = Random.Range(0,100);
+        int randomIndex;
+        GameObject obj;
 
-        GameObject obj = (GameObject)Instantiate(availableObjects[randomIndex]);
+        if (randomObjectIndex  < 30)
+        {
+            randomIndex = Random.Range(0, powerUpObjects.Length);
+
+            obj = (GameObject)Instantiate(powerUpObjects[randomIndex]);
+        }
+        else
+        {
+            randomIndex = Random.Range(0, coinsObjects.Length);
+
+            obj = (GameObject)Instantiate(coinsObjects[randomIndex]);
+        }
 
         float objectPositionX = lastObjectX + Random.Range(objectsMinDistance, objectsMaxDistance);
         float randomY = Random.Range(objectsMinY, objectsMaxY);
@@ -127,26 +141,36 @@ public class Generator : MonoBehaviour
         float farthestObjectX = 0;
 
         List<GameObject> objectsToRemove = new List<GameObject>();
+
         foreach (var obj in objects)
         {
-            float objX = obj.transform.position.x;
-
-            farthestObjectX = Mathf.Max(farthestObjectX, objX);
-
-            if (objX < removeObjectsX)
+            if(obj != null)
             {
-                objectsToRemove.Add(obj);
+                float objX = obj.transform.position.x;
+
+                farthestObjectX = Mathf.Max(farthestObjectX, objX);
+
+                if (objX < removeObjectsX)
+                {
+                    objectsToRemove.Add(obj);
+                }
             }
+            
         }
 
         foreach (var obj in objectsToRemove)
         {
             objects.Remove(obj);
-            Destroy(obj);
+            if(obj != null)
+            {
+                Destroy(obj);
+            }
+            
         }
 
         if (farthestObjectX < addObjectX)
         {
+
             AddObject(farthestObjectX);
         }
     }

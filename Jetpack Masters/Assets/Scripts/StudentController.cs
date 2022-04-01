@@ -147,8 +147,9 @@ public class StudentController : MonoBehaviour
                 if (powerUp.activateShield)
                 {
                     ActivateShield();
+                    Destroy(collider.gameObject);
                 }
-                Destroy(powerUp.gameObject);
+                
             }
         }
     }
