@@ -34,7 +34,7 @@ public class StudentController : MonoBehaviour
     void Start()
     {
         shield = transform.Find("Shield").gameObject;
-
+        DeactivateShield();
         studentAnimator = GetComponent<Animator>();
         playerRigidbody = GetComponent<Rigidbody2D>();
         initialPosition = studentTransform.position;
@@ -133,12 +133,22 @@ public class StudentController : MonoBehaviour
             CollectCoin(collider);
         }
         else if (collider.gameObject.CompareTag("Zapper")) {
-            Debug.Log("asd");
             if(HasSHield()){
                 DeactivateShield();
             }else{
                 studentAnimator.SetBool("isDead", true);
                 playerRigidbody.freezeRotation = false;
+            }
+        }else if (collider.gameObject.CompareTag("Shield"))
+        {
+            PowerUpScript powerUp = collider.GetComponent<PowerUpScript>();
+            if (powerUp)
+            {
+                if (powerUp.activateShield)
+                {
+                    ActivateShield();
+                }
+                Destroy(powerUp.gameObject);
             }
         }
     }

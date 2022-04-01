@@ -9,8 +9,6 @@ public class Shield : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(spriteRenderer != null){
-            spriteRenderer.enabled = !spriteRenderer.enabled;
-        }
+       
     }
 }
