@@ -110,7 +110,7 @@ public class Generator : MonoBehaviour
         int randomIndex;
         GameObject obj;
 
-        if (randomObjectIndex  < 30)
+        if (randomObjectIndex  < 10)
         {
             randomIndex = Random.Range(0, powerUpObjects.Length);
 
