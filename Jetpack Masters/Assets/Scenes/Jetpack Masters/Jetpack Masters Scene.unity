@@ -194,7 +194,7 @@ ParticleSystemRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 903963673
-  m_SortingLayer: 4
+  m_SortingLayer: 5
   m_SortingOrder: 0
   m_RenderMode: 0
   m_SortMode: 0
@@ -5040,6 +5040,7 @@ GameObject:
   - component: {fileID: 688445469}
   - component: {fileID: 688445470}
   - component: {fileID: 688445471}
+  - component: {fileID: 688445472}
   m_Layer: 10
   m_Name: Student
   m_TagString: Player
@@ -5085,7 +5086,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 903963673
-  m_SortingLayer: 4
+  m_SortingLayer: 5
   m_SortingOrder: 0
   m_Sprite: {fileID: 2250577591358363633, guid: 898519281110dc44b9dfa687e8bf5e35, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -5201,9 +5202,11 @@ MonoBehaviour:
   availableRooms:
   - {fileID: 4448502955600208794, guid: fb44b6c60056e7e4b94af8c5bde9d733, type: 3}
   firstRoom: {fileID: 4448502955600208794, guid: fb44b6c60056e7e4b94af8c5bde9d733, type: 3}
-  availableObjects:
+  coinsObjects:
   - {fileID: 5860223087330916359, guid: 5741982b9888bc647bd5480380863bfe, type: 3}
   - {fileID: 5690214037121062289, guid: 408ffd9b926442648bca6bde013d4500, type: 3}
+  powerUpObjects:
+  - {fileID: 3305804069203669223, guid: dad4e6dc78a286d4b8bca9603b14e527, type: 3}
   objects: []
   objectsMinDistance: 5
   objectsMaxDistance: 10
@@ -5262,6 +5265,20 @@ MonoBehaviour:
   - {fileID: 6722069546381334200, guid: d7ca97b036bc41a41af822312e5f1462, type: 3}
   currentZappers: []
   currentPosition: 0
+--- !u!114 &688445472
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 688445462}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40484cd6cba27e749b46d7714c59aa18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  puddles:
+  - {fileID: 7469340980965053780, guid: 8d657c95fd6171c44817d0393adfccce, type: 3}
 --- !u!1 &984295432
 GameObject:
   m_ObjectHideFlags: 0
@@ -5574,7 +5591,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 903963673
-  m_SortingLayer: 4
+  m_SortingLayer: 5
   m_SortingOrder: 0
   m_Sprite: {fileID: -2413806693520163455, guid: ebe73ca9363db456bacf42c025bb4847, type: 3}
   m_Color: {r: 0.11597505, g: 0.10729794, b: 0.41509432, a: 0.5058824}
@@ -5813,7 +5830,7 @@ ParticleSystemRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 903963673
-  m_SortingLayer: 4
+  m_SortingLayer: 5
   m_SortingOrder: 0
   m_RenderMode: 0
   m_SortMode: 0

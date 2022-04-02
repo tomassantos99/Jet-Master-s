@@ -132,7 +132,7 @@ public class StudentController : MonoBehaviour
         {
             CollectCoin(collider);
         }
-        else if (collider.gameObject.CompareTag("Zapper")) {
+        else if (collider.gameObject.CompareTag("Zapper") || collider.gameObject.CompareTag("Puddle")) {
             if(HasSHield()){
                 DeactivateShield();
             }else{

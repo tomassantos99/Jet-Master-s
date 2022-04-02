@@ -7,6 +7,8 @@ TagManager:
   - Ammo
   - Zapper
   - Coins
+  - Shield
+  - Puddle
   layers:
   - Default
   - TransparentFX
@@ -52,6 +54,9 @@ TagManager:
     locked: 0
   - name: ZapperEnd
     uniqueID: 2912157743
+    locked: 0
+  - name: Puddle
+    uniqueID: 458629341
     locked: 0
   - name: Player
     uniqueID: 903963673
