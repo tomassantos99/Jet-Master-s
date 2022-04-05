@@ -59,53 +59,46 @@ public class StudentController : MonoBehaviour
     {
         if (running)
         {
-            if(distanceTravelled > 20)
+            if (!studentAnimator.GetBool("isDead"))
             {
-                bossBattleActive = true;
-            }
-            if (distanceTravelled > 50)
-            {
-
-                playerRigidbody.angularVelocity = 0.0f;
-                jetpackActive = Input.GetButton("Fire1");
-                if (jetpackActive)
+                bool jetpackActive = false;
+                if (distanceTravelled > 20)
                 {
-                    playerRigidbody.AddForce(new Vector2(0, jetpackForce));
-                }
-                UpdateGroundedStatus();
-                AdjustJetpack(jetpackActive);
-                if (!isBossSpawned)
-                {
-                    Instantiate(myPrefab, new Vector2(playerRigidbody.position.x + 10, playerRigidbody.position.y), Quaternion.identity);
-                    isBossSpawned = true;
+                    bossBattleActive = true;
                 }
 
-            }
-            else
-            {
-                jetpackActive = Input.GetButton("Fire1");
-                if (jetpackActive)
+                if (distanceTravelled > 50)
                 {
-                    playerRigidbody.AddForce(new Vector2(0, jetpackForce));
-                }
-                Vector2 newVelocity = playerRigidbody.velocity;
-                newVelocity.x = forwardMovementSpeed;
-                playerRigidbody.velocity = newVelocity;
 
-                UpdateGroundedStatus();
-                AdjustJetpack(jetpackActive);
-            }
-        }
-        else
-        {
-            var mainJetpackEmission = mainJetpack.emission;
-            var miniJetpackEmission = miniJetpack.emission;
-            mainJetpackEmission.enabled = false;
-            miniJetpackEmission.enabled = false;
-            if (transform.eulerAngles.z <= 270.0f && transform.eulerAngles.z > 10.0f)
-            {
-                playerRigidbody.angularVelocity = 0.0f;
-                transform.eulerAngles = new Vector3(0, 0, -90.0f);
+                    playerRigidbody.angularVelocity = 0.0f;
+                    jetpackActive = Input.GetButton("Fire1");
+                    if (jetpackActive)
+                    {
+                        playerRigidbody.AddForce(new Vector2(0, jetpackForce));
+                    }
+                    UpdateGroundedStatus();
+                    AdjustJetpack(jetpackActive);
+                    if (!isBossSpawned)
+                    {
+                        Instantiate(myPrefab, new Vector2(playerRigidbody.position.x + 10, playerRigidbody.position.y), Quaternion.identity);
+                        isBossSpawned = true;
+                    }
+
+                }
+                else
+                {
+                    jetpackActive = Input.GetButton("Fire1");
+                    if (jetpackActive)
+                    {
+                        playerRigidbody.AddForce(new Vector2(0, jetpackForce));
+                    }
+                    Vector2 newVelocity = playerRigidbody.velocity;
+                    newVelocity.x = forwardMovementSpeed;
+                    playerRigidbody.velocity = newVelocity;
+
+                    UpdateGroundedStatus();
+                    AdjustJetpack(jetpackActive);
+                }
             }
             else
             {
