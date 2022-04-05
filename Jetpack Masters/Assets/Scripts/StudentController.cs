@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class StudentController : MonoBehaviour
 {
-
+    public GameObject myPrefab;
     public float jetpackForce = 75.0f;
     public float forwardMovementSpeed = 3.0f;
     public ParticleSystem mainJetpack;
@@ -26,6 +26,9 @@ public class StudentController : MonoBehaviour
     private int distanceTravelled;
     public Text totalDistanceTravelledLabel;
 
+    public bool bossBattleActive;
+    public bool isBossSpawned;
+
     GameObject shield;
 
     public GameObject countdownPanel;
@@ -37,6 +40,13 @@ public class StudentController : MonoBehaviour
     void Start()
     {
         StartCoroutine(Countdown());
+        bossBattleActive = false;
+        isBossSpawned = false;
+        shield = transform.Find("Shield").gameObject;
+        DeactivateShield();
+        studentAnimator = GetComponent<Animator>();
+        playerRigidbody = GetComponent<Rigidbody2D>();
+        initialPosition = studentTransform.position;
     }
 
     // Update is called once per frame
@@ -49,20 +59,46 @@ public class StudentController : MonoBehaviour
     {
         if (running)
         {
-            bool jetpackActive = false;
             if (!studentAnimator.GetBool("isDead"))
             {
-                jetpackActive = Input.GetButton("Fire1");
-                if (jetpackActive)
+                bool jetpackActive = false;
+                if (distanceTravelled > 20)
                 {
-                    playerRigidbody.AddForce(new Vector2(0, jetpackForce));
+                    bossBattleActive = true;
                 }
-                Vector2 newVelocity = playerRigidbody.velocity;
-                newVelocity.x = forwardMovementSpeed;
-                playerRigidbody.velocity = newVelocity;
 
-                UpdateGroundedStatus();
-                AdjustJetpack(jetpackActive);
+                if (distanceTravelled > 50)
+                {
+
+                    playerRigidbody.angularVelocity = 0.0f;
+                    jetpackActive = Input.GetButton("Fire1");
+                    if (jetpackActive)
+                    {
+                        playerRigidbody.AddForce(new Vector2(0, jetpackForce));
+                    }
+                    UpdateGroundedStatus();
+                    AdjustJetpack(jetpackActive);
+                    if (!isBossSpawned)
+                    {
+                        Instantiate(myPrefab, new Vector2(playerRigidbody.position.x + 10, playerRigidbody.position.y), Quaternion.identity);
+                        isBossSpawned = true;
+                    }
+
+                }
+                else
+                {
+                    jetpackActive = Input.GetButton("Fire1");
+                    if (jetpackActive)
+                    {
+                        playerRigidbody.AddForce(new Vector2(0, jetpackForce));
+                    }
+                    Vector2 newVelocity = playerRigidbody.velocity;
+                    newVelocity.x = forwardMovementSpeed;
+                    playerRigidbody.velocity = newVelocity;
+
+                    UpdateGroundedStatus();
+                    AdjustJetpack(jetpackActive);
+                }
             }
             else
             {

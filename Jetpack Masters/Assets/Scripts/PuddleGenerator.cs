@@ -3,10 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PuddleGenerator : MonoBehaviour
+
+
 {
+    StudentController studentController;
+    [SerializeField] GameObject student;
     public List<GameObject> puddles;
     private List<GameObject> currentPuddles;
     private float currentPosition;
+
+    void Awake()
+    {
+        studentController = student.GetComponent<StudentController>();
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -24,14 +33,21 @@ public class PuddleGenerator : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (transform.position.x - currentPuddles[0].transform.position.x > 2.3f)
+        GameObject puddle;
+
+
+        if (currentPuddles.Count > 0 && transform.position.x - currentPuddles[0].transform.position.x > 2.3f )
         {
-            GameObject puddle = currentPuddles[0];
+            puddle = currentPuddles[0];
 
             currentPuddles.RemoveAt(0);
 
             Destroy(puddle);
+        }
 
+
+        if (!studentController.bossBattleActive && currentPuddles.Count == 0)
+        {
             puddle = GeneratePuddle();
 
             currentPuddles.Add(puddle);

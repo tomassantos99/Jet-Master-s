@@ -3,10 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class ZapperController : MonoBehaviour {
+
+    StudentController studentController;
+    [SerializeField] GameObject student;
     public List<GameObject> zappers;
     public List<GameObject> currentZappers;
     public float currentPosition;
     private Animator playerAnimator;
+
+    void Awake()
+    {
+        studentController = student.GetComponent<StudentController>();
+    }
+
     // Start is called before the first frame update
     void Start() {
         currentPosition = 10.0f;
@@ -27,16 +36,23 @@ public class ZapperController : MonoBehaviour {
     }
 
     void FixedUpdate() {
-        if(transform.position.x - currentZappers[0].transform.position.x > 10.0f) { 
-            GameObject zap = currentZappers[0];
+
+        GameObject zap;
+
+        if (currentZappers.Count > 0 && transform.position.x - currentZappers[0].transform.position.x > 10.0f)
+        {
+            zap = currentZappers[0];
 
             currentZappers.RemoveAt(0);
 
             Destroy(zap);
 
-            zap = GenerateZapper();
+            if (!studentController.bossBattleActive)
+            {
+                zap = GenerateZapper();
 
-            currentZappers.Add(zap);
+                currentZappers.Add(zap);
+            }
         }
     }
 
