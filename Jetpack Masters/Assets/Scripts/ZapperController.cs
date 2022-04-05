@@ -103,6 +103,10 @@ public class ZapperController : MonoBehaviour {
                 }
             break;
             default:
+                float max = 1.9f - zap.GetComponent<BoxCollider2D>().bounds.max.y * Mathf.Abs(Mathf.Cos(Mathf.PI/4 * rotation));
+                float min = -1.9f - zap.GetComponent<BoxCollider2D>().bounds.min.y * Mathf.Abs(Mathf.Cos(Mathf.PI/4 * rotation));
+                position += new Vector3(0, Random.Range(min, max), 0);
+                zap.transform.position = position;
             break;
         }
          currentPosition += 10.0f;

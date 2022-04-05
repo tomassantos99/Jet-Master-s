@@ -23,7 +23,7 @@ public class StudentController : MonoBehaviour
 
     public Transform studentTransform;
     private Vector3 initialPosition;
-    private float distanceTravelled;
+    private int distanceTravelled;
     public Text totalDistanceTravelledLabel;
 
     public bool bossBattleActive;
@@ -31,11 +31,15 @@ public class StudentController : MonoBehaviour
 
     GameObject shield;
 
+    public GameObject countdownPanel;
+    private bool running = false;
+    public GameObject gameOverPanel;
 
 
     // Start is called before the first frame update
     void Start()
     {
+        StartCoroutine(Countdown());
         bossBattleActive = false;
         isBossSpawned = false;
         shield = transform.Find("Shield").gameObject;
@@ -53,8 +57,7 @@ public class StudentController : MonoBehaviour
 
     void FixedUpdate()
     {
-        bool jetpackActive = false;
-        if (!studentAnimator.GetBool("isDead"))
+        if (running)
         {
             if(distanceTravelled > 20)
             {
@@ -62,7 +65,7 @@ public class StudentController : MonoBehaviour
             }
             if (distanceTravelled > 50)
             {
-                
+
                 playerRigidbody.angularVelocity = 0.0f;
                 jetpackActive = Input.GetButton("Fire1");
                 if (jetpackActive)
@@ -76,7 +79,7 @@ public class StudentController : MonoBehaviour
                     Instantiate(myPrefab, new Vector2(playerRigidbody.position.x + 10, playerRigidbody.position.y), Quaternion.identity);
                     isBossSpawned = true;
                 }
-                
+
             }
             else
             {
@@ -105,10 +108,40 @@ public class StudentController : MonoBehaviour
                 transform.eulerAngles = new Vector3(0, 0, -90.0f);
             }
             else
-                playerRigidbody.angularVelocity = -150.0f;
+            {
+                var mainJetpackEmission = mainJetpack.emission;
+                var miniJetpackEmission = miniJetpack.emission;
+                mainJetpackEmission.enabled = false;
+                miniJetpackEmission.enabled = false;
+                if (transform.eulerAngles.z <= 270.0f && transform.eulerAngles.z > 10.0f)
+                {
+                    playerRigidbody.angularVelocity = 0.0f;
+                    transform.eulerAngles = new Vector3(0, 0, -90.0f);
+                }
+                else
+                    playerRigidbody.angularVelocity = -150.0f;
+            }
+            distanceTravelled = Mathf.RoundToInt(Vector3.Distance(studentTransform.position, initialPosition));
+            totalDistanceTravelledLabel.text = distanceTravelled.ToString() + " m";
         }
-        distanceTravelled = Mathf.RoundToInt(Vector3.Distance(studentTransform.position, initialPosition));
-        totalDistanceTravelledLabel.text = distanceTravelled.ToString() + " m";
+    }
+
+    IEnumerator Countdown()
+    {
+        gameObject.GetComponent<Rigidbody2D>().gravityScale = 0;
+        yield return new WaitForSeconds(2);
+        for (int i = 3; i >= 0; i--)
+        {
+            countdownPanel.transform.Find("Display Text").gameObject.GetComponent<Text>().text = i.ToString();
+            yield return new WaitForSeconds(1);
+        }
+        countdownPanel.SetActive(false);
+        shield = transform.Find("Shield").gameObject;
+        studentAnimator = GetComponent<Animator>();
+        playerRigidbody = GetComponent<Rigidbody2D>();
+        initialPosition = studentTransform.position;
+        running = true;
+        gameObject.GetComponent<Rigidbody2D>().gravityScale = 1;
     }
 
     void ActivateShield()
@@ -173,8 +206,7 @@ public class StudentController : MonoBehaviour
             }
             else
             {
-                studentAnimator.SetBool("isDead", true);
-                playerRigidbody.freezeRotation = false;
+                Die();
             }
         }
         else if (collider.gameObject.CompareTag("Shield"))
@@ -190,5 +222,20 @@ public class StudentController : MonoBehaviour
 
             }
         }
+    }
+
+    void Die()
+    {
+        studentAnimator.SetBool("isDead", true);
+        playerRigidbody.freezeRotation = false;
+        StartCoroutine(GameOver());
+    }
+
+    IEnumerator GameOver()
+    {
+        yield return new WaitForSeconds(2);
+        long score = distanceTravelled + coins;
+        gameOverPanel.transform.Find("Score").gameObject.GetComponent<Text>().text = "Score: " + score;
+        gameOverPanel.SetActive(true);
     }
 }
