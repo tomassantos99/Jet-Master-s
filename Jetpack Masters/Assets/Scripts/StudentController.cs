@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class StudentController : MonoBehaviour
 {
-
+    public GameObject myPrefab;
     public float jetpackForce = 75.0f;
     public float forwardMovementSpeed = 3.0f;
     public ParticleSystem mainJetpack;
@@ -26,13 +26,18 @@ public class StudentController : MonoBehaviour
     private float distanceTravelled;
     public Text totalDistanceTravelledLabel;
 
-     GameObject shield;
+    public bool bossBattleActive;
+    public bool isBossSpawned;
+
+    GameObject shield;
 
 
 
     // Start is called before the first frame update
     void Start()
     {
+        bossBattleActive = false;
+        isBossSpawned = false;
         shield = transform.Find("Shield").gameObject;
         DeactivateShield();
         studentAnimator = GetComponent<Animator>();
@@ -51,17 +56,42 @@ public class StudentController : MonoBehaviour
         bool jetpackActive = false;
         if (!studentAnimator.GetBool("isDead"))
         {
-            jetpackActive = Input.GetButton("Fire1");
-            if (jetpackActive)
+            if(distanceTravelled > 20)
             {
-                playerRigidbody.AddForce(new Vector2(0, jetpackForce));
+                bossBattleActive = true;
             }
-            Vector2 newVelocity = playerRigidbody.velocity;
-            newVelocity.x = forwardMovementSpeed;
-            playerRigidbody.velocity = newVelocity;
+            if (distanceTravelled > 50)
+            {
+                
+                playerRigidbody.angularVelocity = 0.0f;
+                jetpackActive = Input.GetButton("Fire1");
+                if (jetpackActive)
+                {
+                    playerRigidbody.AddForce(new Vector2(0, jetpackForce));
+                }
+                UpdateGroundedStatus();
+                AdjustJetpack(jetpackActive);
+                if (!isBossSpawned)
+                {
+                    Instantiate(myPrefab, new Vector2(playerRigidbody.position.x + 10, playerRigidbody.position.y), Quaternion.identity);
+                    isBossSpawned = true;
+                }
+                
+            }
+            else
+            {
+                jetpackActive = Input.GetButton("Fire1");
+                if (jetpackActive)
+                {
+                    playerRigidbody.AddForce(new Vector2(0, jetpackForce));
+                }
+                Vector2 newVelocity = playerRigidbody.velocity;
+                newVelocity.x = forwardMovementSpeed;
+                playerRigidbody.velocity = newVelocity;
 
-            UpdateGroundedStatus();
-            AdjustJetpack(jetpackActive);
+                UpdateGroundedStatus();
+                AdjustJetpack(jetpackActive);
+            }
         }
         else
         {
@@ -81,15 +111,18 @@ public class StudentController : MonoBehaviour
         totalDistanceTravelledLabel.text = distanceTravelled.ToString() + " m";
     }
 
-    void ActivateShield(){
+    void ActivateShield()
+    {
         shield.SetActive(true);
     }
 
-    void DeactivateShield(){
+    void DeactivateShield()
+    {
         shield.SetActive(false);
     }
 
-    bool HasSHield(){
+    bool HasSHield()
+    {
         return shield.activeSelf;
     }
 
@@ -132,14 +165,19 @@ public class StudentController : MonoBehaviour
         {
             CollectCoin(collider);
         }
-        else if (collider.gameObject.CompareTag("Zapper") || collider.gameObject.CompareTag("Puddle")) {
-            if(HasSHield()){
+        else if (collider.gameObject.CompareTag("Zapper") || collider.gameObject.CompareTag("Puddle"))
+        {
+            if (HasSHield())
+            {
                 DeactivateShield();
-            }else{
+            }
+            else
+            {
                 studentAnimator.SetBool("isDead", true);
                 playerRigidbody.freezeRotation = false;
             }
-        }else if (collider.gameObject.CompareTag("Shield"))
+        }
+        else if (collider.gameObject.CompareTag("Shield"))
         {
             PowerUpScript powerUp = collider.GetComponent<PowerUpScript>();
             if (powerUp)
@@ -149,7 +187,7 @@ public class StudentController : MonoBehaviour
                     ActivateShield();
                     Destroy(collider.gameObject);
                 }
-                
+
             }
         }
     }

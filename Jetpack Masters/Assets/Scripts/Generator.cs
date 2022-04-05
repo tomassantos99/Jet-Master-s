@@ -5,6 +5,8 @@ using System.Text.RegularExpressions;
 
 public class Generator : MonoBehaviour
 {
+    StudentController studentController;
+    [SerializeField] GameObject student;
 
     public GameObject[] availableRooms;
     public GameObject firstRoom;
@@ -24,6 +26,11 @@ public class Generator : MonoBehaviour
     public float objectsMinRotation = -45.0f;
     public float objectsMaxRotation = 45.0f;
 
+    void Awake()
+    {
+        studentController = student.GetComponent<StudentController>();
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -37,7 +44,7 @@ public class Generator : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     void AddRoom(float farthestRoomEndX)
@@ -99,18 +106,22 @@ public class Generator : MonoBehaviour
         while (true)
         {
             GenerateRoomIfRequired();
-            GenerateObjectsIfRequired();
+            
+            if (!studentController.bossBattleActive)
+            {
+                GenerateObjectsIfRequired();
+            }
             yield return new WaitForSeconds(0.25f);
         }
     }
 
     void AddObject(float lastObjectX)
     {
-        int randomObjectIndex = Random.Range(0,100);
+        int randomObjectIndex = Random.Range(0, 100);
         int randomIndex;
         GameObject obj;
 
-        if (randomObjectIndex  < 10)
+        if (randomObjectIndex < 10)
         {
             randomIndex = Random.Range(0, powerUpObjects.Length);
 
@@ -144,7 +155,7 @@ public class Generator : MonoBehaviour
 
         foreach (var obj in objects)
         {
-            if(obj != null)
+            if (obj != null)
             {
                 float objX = obj.transform.position.x;
 
@@ -155,17 +166,17 @@ public class Generator : MonoBehaviour
                     objectsToRemove.Add(obj);
                 }
             }
-            
+
         }
 
         foreach (var obj in objectsToRemove)
         {
             objects.Remove(obj);
-            if(obj != null)
+            if (obj != null)
             {
                 Destroy(obj);
             }
-            
+
         }
 
         if (farthestObjectX < addObjectX)
