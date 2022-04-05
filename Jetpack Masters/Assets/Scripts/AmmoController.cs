@@ -25,4 +25,11 @@ public class AmmoController : MonoBehaviour
         newVelocity.x = forwardMovementSpeed;
         ammoRigidbody.velocity = newVelocity;
     }
+
+    void OnTriggerEnter2D(Collider2D collider)
+    {
+        if (collider.gameObject.CompareTag("Drone")){
+           gameObject.transform.position = new Vector3(0f,100f,0f);
+        }
+    }
 }
