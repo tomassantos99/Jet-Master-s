@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
+using System.IO;
 
 public class StudentController : MonoBehaviour
 {
@@ -34,7 +35,6 @@ public class StudentController : MonoBehaviour
     public GameObject countdownPanel;
     private bool running = false;
     public GameObject gameOverPanel;
-
 
     // Start is called before the first frame update
     void Start()
@@ -228,7 +228,49 @@ public class StudentController : MonoBehaviour
     {
         yield return new WaitForSeconds(2);
         long score = distanceTravelled + coins;
+        long previousHighscore = ReadPreviousHighScore();
+        if (score > previousHighscore)
+        {
+            WriteNewHighScore(score);
+            previousHighscore = score;
+        }
         gameOverPanel.transform.Find("Score").gameObject.GetComponent<Text>().text = "Score: " + score;
+        gameOverPanel.transform.Find("High Score").gameObject.GetComponent<Text>().text = "High Score: " + previousHighscore;
         gameOverPanel.SetActive(true);
+    }
+
+    private long ReadPreviousHighScore()
+    {
+        string path = Application.persistentDataPath + "/highscore.txt";
+        try
+        {
+            StreamReader reader = new StreamReader(path);
+            string fileContent = reader.ReadToEnd().Trim();
+            if (string.IsNullOrEmpty(fileContent))
+            {
+                return 0;
+            }
+            long highScore = long.Parse(fileContent);
+            reader.Close();
+            reader.Dispose();
+            return highScore;
+        }
+        catch (FileNotFoundException)
+        {
+            return 0;
+        }
+        finally { 
+        }
+    }
+
+    private void WriteNewHighScore(long newHighScore)
+    {
+        string path = Application.persistentDataPath + "/highscore.txt";
+
+        StreamWriter writer = new StreamWriter(path, false);
+        writer.Write(newHighScore.ToString());
+
+        writer.Close();
+        writer.Dispose();
     }
 }
