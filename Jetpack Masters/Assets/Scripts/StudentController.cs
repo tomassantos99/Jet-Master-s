@@ -40,6 +40,8 @@ public class StudentController : MonoBehaviour
     private double speedUpStart;
     private int startDistance;
 
+    private ShootingController shootingController;
+
 
     // Start is called before the first frame update
     void Start()
@@ -53,6 +55,7 @@ public class StudentController : MonoBehaviour
         studentAnimator = GetComponent<Animator>();
         playerRigidbody = GetComponent<Rigidbody2D>();
         initialPosition = studentTransform.position;
+        shootingController = GetComponent<ShootingController>();
 
         DisableSpedUpSprites();
     }
@@ -235,6 +238,7 @@ public class StudentController : MonoBehaviour
             startDistance = distanceTravelled;
             playerRigidbody.gravityScale = 0;
             EnableSpedUpSprites();
+            shootingController.freeToShoot = false;
             Destroy(collider.gameObject);
         }
     }
@@ -302,8 +306,9 @@ public class StudentController : MonoBehaviour
         spedUp = false;
         playerRigidbody.gravityScale = 1;
         playerRigidbody.velocity = new Vector2(forwardMovementSpeed, 0f);
+        shootingController.freeToShoot = true;
     }
-    
+
     private long ReadPreviousHighScore()
     {
         string path = Application.persistentDataPath + "/highscore.txt";
