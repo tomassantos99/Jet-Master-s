@@ -10,6 +10,7 @@ TagManager:
   - Shield
   - Puddle
   - Drone
+  - Can
   layers:
   - Default
   - TransparentFX
@@ -64,6 +65,9 @@ TagManager:
     locked: 0
   - name: Player
     uniqueID: 903963673
+    locked: 0
+  - name: Shield
+    uniqueID: 1814150883
     locked: 0
   - name: Explosion
     uniqueID: 3324219821

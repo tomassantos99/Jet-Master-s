@@ -302,6 +302,8 @@ public class StudentController : MonoBehaviour
         spedUp = false;
         playerRigidbody.gravityScale = 1;
         playerRigidbody.velocity = new Vector2(forwardMovementSpeed, 0f);
+    }
+    
     private long ReadPreviousHighScore()
     {
         string path = Application.persistentDataPath + "/highscore.txt";
