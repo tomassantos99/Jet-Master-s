@@ -35,6 +35,10 @@ public class StudentController : MonoBehaviour
     private bool running = false;
     public GameObject gameOverPanel;
 
+    private bool spedUp;
+    private double speedUpStart;
+    private int startDistance;
+
 
     // Start is called before the first frame update
     void Start()
@@ -42,11 +46,14 @@ public class StudentController : MonoBehaviour
         StartCoroutine(Countdown());
         bossBattleActive = false;
         isBossSpawned = false;
+        spedUp = false;
         shield = transform.Find("Shield").gameObject;
         DeactivateShield();
         studentAnimator = GetComponent<Animator>();
         playerRigidbody = GetComponent<Rigidbody2D>();
         initialPosition = studentTransform.position;
+
+        DisableSpedUpSprites();
     }
 
     // Update is called once per frame
@@ -69,7 +76,7 @@ public class StudentController : MonoBehaviour
 
                 if (distanceTravelled > 50)
                 {
-
+                    if(spedUp) EndSpeedUp();
                     playerRigidbody.angularVelocity = 0.0f;
                     jetpackActive = Input.GetButton("Fire1");
                     if (jetpackActive)
@@ -84,6 +91,11 @@ public class StudentController : MonoBehaviour
                         isBossSpawned = true;
                     }
 
+                }
+                else if(spedUp) {
+                    SpeedUpMovement();
+                    UpdateGroundedStatus();
+                    AdjustJetpack(jetpackActive);
                 }
                 else
                 {
@@ -191,7 +203,7 @@ public class StudentController : MonoBehaviour
         {
             CollectCoin(collider);
         }
-        else if (collider.gameObject.CompareTag("Zapper") || collider.gameObject.CompareTag("Puddle") || collider.gameObject.CompareTag("Drone"))
+        else if ((collider.gameObject.CompareTag("Zapper") || collider.gameObject.CompareTag("Puddle") || collider.gameObject.CompareTag("Drone")) && !spedUp)
         {
             if (HasSHield())
             {
@@ -215,6 +227,15 @@ public class StudentController : MonoBehaviour
 
             }
         }
+        else if (collider.gameObject.CompareTag("Can"))
+        {
+            spedUp = true;
+            speedUpStart = Time.realtimeSinceStartup;
+            startDistance = distanceTravelled;
+            playerRigidbody.gravityScale = 0;
+            EnableSpedUpSprites();
+            Destroy(collider.gameObject);
+        }
     }
 
     void Die()
@@ -230,5 +251,48 @@ public class StudentController : MonoBehaviour
         long score = distanceTravelled + coins;
         gameOverPanel.transform.Find("Score").gameObject.GetComponent<Text>().text = "Score: " + score;
         gameOverPanel.SetActive(true);
+    }
+
+    void SpeedUpMovement() {
+        double timeElapsed = Time.realtimeSinceStartup - speedUpStart;
+        if (timeElapsed >= 1f) {
+            float Xvel = playerRigidbody.velocity.x;
+            if (Xvel <= 20f) 
+                playerRigidbody.AddForce(new Vector2(50f, 0f));
+            else
+                playerRigidbody.velocity = new Vector2(40f, 0f);
+            
+            if (distanceTravelled - startDistance > 50) {
+                EndSpeedUp();
+            }
+        }
+        else {
+            float Ypos = playerRigidbody.transform.position.y;
+            if (Ypos > 0.5 || Ypos < -0.5) 
+                playerRigidbody.velocity = new Vector2(playerRigidbody.velocity.x, -1f * (Ypos/Mathf.Abs(Ypos)));
+            else
+                playerRigidbody.velocity = new Vector2(playerRigidbody.velocity.x, 0f);
+            playerRigidbody.AddForce(new Vector2(-10f, 0f));
+
+            Vector3 rot = new Vector3(0f, 90f-(90f*(float)timeElapsed), 0f);
+            transform.Find("Wing").gameObject.transform.rotation = Quaternion.Euler(rot);
+        }
+    }
+
+    void EnableSpedUpSprites() {
+        transform.Find("SpdShield") .gameObject.GetComponent<Renderer>().enabled = true;
+        transform.Find("Wing") .gameObject.GetComponent<Renderer>().enabled = true;
+    }
+
+    void DisableSpedUpSprites() {
+        transform.Find("SpdShield").gameObject.GetComponent<Renderer>().enabled = false;
+        transform.Find("Wing").gameObject.GetComponent<Renderer>().enabled = false;
+    }
+
+    void EndSpeedUp() {
+        DisableSpedUpSprites();
+        spedUp = false;
+        playerRigidbody.gravityScale = 1;
+        playerRigidbody.velocity = new Vector2(forwardMovementSpeed, 0f);
     }
 }

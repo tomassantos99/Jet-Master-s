@@ -12,6 +12,11 @@ public class AmmoController : MonoBehaviour
     {
         ammoRigidbody = GetComponent<Rigidbody2D>();
         ammoRigidbody.angularVelocity = angularVelocity;
+        int sprite = Random.Range(0, 4);
+        for (int i = 0; i < 4; i++) {
+            if (i != sprite)
+                transform.GetChild(i).gameObject.GetComponent<Renderer>().enabled = false;
+        } 
     }
 
     // Update is called once per frame
