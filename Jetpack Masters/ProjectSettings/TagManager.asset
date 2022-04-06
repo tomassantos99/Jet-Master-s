@@ -9,11 +9,12 @@ TagManager:
   - Coins
   - Shield
   - Puddle
+  - Drone
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Floor collider
   - Water
   - UI
   - 
@@ -21,7 +22,7 @@ TagManager:
   - Ammo
   - Zapper
   - Player
-  - 
+  - Drone
   - 
   - 
   - 
@@ -57,6 +58,9 @@ TagManager:
     locked: 0
   - name: Puddle
     uniqueID: 458629341
+    locked: 0
+  - name: Drone
+    uniqueID: 1581237489
     locked: 0
   - name: Player
     uniqueID: 903963673
