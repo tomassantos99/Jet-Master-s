@@ -49,7 +49,6 @@ public class BossHP : MonoBehaviour
 
 		if (health <= 0)
 		{
-			studentController.ResumeRunning();
 			Die();
 			bossHP.SetActive(false);
 		}
@@ -57,8 +56,8 @@ public class BossHP : MonoBehaviour
 
 	void Die()
 	{
-		//Instantiate(deathEffect, transform.position, Quaternion.identity);
-		Destroy(gameObject);
+		GetComponent<Animator>().SetBool("IsDeath", true);
+		StartCoroutine(DestroyBoss(gameObject));
 	}
 
 	void OnTriggerEnter2D(Collider2D hitInfo)
@@ -66,5 +65,12 @@ public class BossHP : MonoBehaviour
 		TakeDamage(10);
 		healthBar.value = health;
 	}
+
+	IEnumerator DestroyBoss(GameObject boss)
+    {
+		yield return new WaitForSeconds(3.5f);
+		Destroy(boss);
+		studentController.ResumeRunning();
+    }
 
 }
