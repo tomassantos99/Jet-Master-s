@@ -14,7 +14,6 @@ public class Generator : MonoBehaviour
     private float screenWidthInPoints;
 
     public GameObject[] coinsObjects;
-    public GameObject[] powerUpObjects;
     public List<GameObject> objects;
 
     public float objectsMinDistance = 5.0f;
@@ -50,7 +49,7 @@ public class Generator : MonoBehaviour
     void AddRoom(float farthestRoomEndX)
     {
         int randomRoomIndex = Random.Range(0, availableRooms.Length);
-        GameObject room = (GameObject)Instantiate(availableRooms[randomRoomIndex]);
+        GameObject room = Instantiate(availableRooms[randomRoomIndex]);
         float roomWidth = room.transform.Find("Floor").localScale.x;
         float roomCenter = farthestRoomEndX + roomWidth * 0.5f;
         room.transform.position = new Vector3(roomCenter, 0, 0);
@@ -106,7 +105,7 @@ public class Generator : MonoBehaviour
         while (true)
         {
             GenerateRoomIfRequired();
-            
+
             if (!studentController.bossBattleActive)
             {
                 GenerateObjectsIfRequired();
@@ -117,22 +116,13 @@ public class Generator : MonoBehaviour
 
     void AddObject(float lastObjectX)
     {
-        int randomObjectIndex = Random.Range(0, 100);
+
         int randomIndex;
         GameObject obj;
 
-        if (randomObjectIndex < 10)
-        {
-            randomIndex = Random.Range(0, powerUpObjects.Length);
+        randomIndex = Random.Range(0, coinsObjects.Length);
 
-            obj = (GameObject)Instantiate(powerUpObjects[randomIndex]);
-        }
-        else
-        {
-            randomIndex = Random.Range(0, coinsObjects.Length);
-
-            obj = (GameObject)Instantiate(coinsObjects[randomIndex]);
-        }
+        obj = (GameObject)Instantiate(coinsObjects[randomIndex]);
 
         float objectPositionX = lastObjectX + Random.Range(objectsMinDistance, objectsMaxDistance);
         float randomY = Random.Range(objectsMinY, objectsMaxY);
