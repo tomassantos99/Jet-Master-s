@@ -16,6 +16,8 @@ public class Generator : MonoBehaviour
     public GameObject[] coinsObjects;
     public List<GameObject> objects;
 
+    public GameObject[] nonBossObjects;
+
     public float objectsMinDistance = 5.0f;
     public float objectsMaxDistance = 10.0f;
 
@@ -116,13 +118,23 @@ public class Generator : MonoBehaviour
 
     void AddObject(float lastObjectX)
     {
+        int rnd = Random.Range(0, 100);
 
         int randomIndex;
         GameObject obj;
 
-        randomIndex = Random.Range(0, coinsObjects.Length);
+        if (rnd < 20)
+        {
+            randomIndex = Random.Range(0, nonBossObjects.Length);
 
-        obj = (GameObject)Instantiate(coinsObjects[randomIndex]);
+            obj = Instantiate(nonBossObjects[randomIndex]);
+        }
+        else
+        {
+            randomIndex = Random.Range(0, coinsObjects.Length);
+
+            obj = Instantiate(coinsObjects[randomIndex]);
+        }
 
         float objectPositionX = lastObjectX + Random.Range(objectsMinDistance, objectsMaxDistance);
         float randomY = Random.Range(objectsMinY, objectsMaxY);

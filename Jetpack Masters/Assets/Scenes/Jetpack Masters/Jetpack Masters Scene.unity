@@ -5611,6 +5611,10 @@ MonoBehaviour:
   - {fileID: 5860223087330916359, guid: 5741982b9888bc647bd5480380863bfe, type: 3}
   - {fileID: 5690214037121062289, guid: 408ffd9b926442648bca6bde013d4500, type: 3}
   objects: []
+  nonBossObjects:
+  - {fileID: 2488710640189392718, guid: 82127ec9868d30c48a8783b83e083ca7, type: 3}
+  - {fileID: 3025999427731771232, guid: b3cd895a4d7c3f547aaf2e392ff9f89b, type: 3}
+  - {fileID: 3538423659183835331, guid: bc144ec3bbc5a5045857f0ec00e77646, type: 3}
   objectsMinDistance: 5
   objectsMaxDistance: 10
   objectsMinY: -1.4
