@@ -96,13 +96,13 @@ public class StudentController : MonoBehaviour
                     playerRigidbody.AddForce(new Vector2(0, jetpackForce));
                 }
 
-                if ((distanceTravelled + 30) / 60 > spawnedBosses)
+                if ((distanceTravelled + 30) / 200 > spawnedBosses)
                 {
                     bossBattleActive = true;
                 }
 
 
-                if (distanceTravelled / 60 > spawnedBosses)
+                if (distanceTravelled / 200 > spawnedBosses)
                 {
                     if (spedUp)
                     {
