@@ -25,4 +25,9 @@ public class AmmoController : MonoBehaviour
         newVelocity.x = forwardMovementSpeed;
         ammoRigidbody.velocity = newVelocity;
     }
+
+    void OnTriggerEnter2D(Collider2D hitInfo)
+    {
+        Destroy(gameObject);
+    }
 }

@@ -31,9 +31,14 @@ public class ShootingController : MonoBehaviour {
             List<GameObject> ammoToRemove = new List<GameObject>();
             foreach (var ammo in currentAmmo) {
                 float playerX = transform.position.x;
-                float lastAmmoX = ammo.transform.position.x;
-                if(playerX - lastAmmoX < -10) {
-                    ammoToRemove.Add(ammo);
+
+                if (ammo != null)
+                {
+                    float lastAmmoX = ammo.transform.position.x;
+                    if (playerX - lastAmmoX < -10)
+                    {
+                        ammoToRemove.Add(ammo);
+                    }
                 }
             }
             foreach (var ammo in ammoToRemove) {

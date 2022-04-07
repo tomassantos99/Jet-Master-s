@@ -34,6 +34,10 @@ public class StudentController : MonoBehaviour
     public GameObject countdownPanel;
     private bool running = false;
     public GameObject gameOverPanel;
+    //public GameObject bossHP;
+    public int studentHealth = 30;
+    public int spawnedBosses = 0;
+    //public Slider studentHP;
 
 
     // Start is called before the first frame update
@@ -47,6 +51,9 @@ public class StudentController : MonoBehaviour
         studentAnimator = GetComponent<Animator>();
         playerRigidbody = GetComponent<Rigidbody2D>();
         initialPosition = studentTransform.position;
+        //studentHP = bossHP.GetComponent<Slider>();
+
+
     }
 
     // Update is called once per frame
@@ -61,44 +68,39 @@ public class StudentController : MonoBehaviour
         {
             if (!studentAnimator.GetBool("isDead"))
             {
+                
                 bool jetpackActive = false;
-                if (distanceTravelled > 20)
+                jetpackActive = Input.GetButton("Fire1");
+
+                if (jetpackActive)
+                {
+                    playerRigidbody.AddForce(new Vector2(0, jetpackForce));
+                }
+
+                if ((distanceTravelled+30) / 60 > spawnedBosses)
                 {
                     bossBattleActive = true;
                 }
 
-                if (distanceTravelled > 50)
+                if (distanceTravelled/60 > spawnedBosses)
                 {
-
                     playerRigidbody.angularVelocity = 0.0f;
-                    jetpackActive = Input.GetButton("Fire1");
-                    if (jetpackActive)
-                    {
-                        playerRigidbody.AddForce(new Vector2(0, jetpackForce));
-                    }
-                    UpdateGroundedStatus();
-                    AdjustJetpack(jetpackActive);
-                    if (!isBossSpawned)
-                    {
-                        Instantiate(myPrefab, new Vector2(playerRigidbody.position.x + 10, playerRigidbody.position.y), Quaternion.identity);
-                        isBossSpawned = true;
-                    }
-
+                    //bossHP.SetActive(true);
+                    //studentHP.value = studentHealth;
+                    Instantiate(myPrefab, new Vector2(playerRigidbody.position.x + 10, playerRigidbody.position.y), Quaternion.identity);
+                    isBossSpawned = true;
+                    spawnedBosses++;
                 }
-                else
+
+                if (!bossBattleActive || !isBossSpawned)
                 {
-                    jetpackActive = Input.GetButton("Fire1");
-                    if (jetpackActive)
-                    {
-                        playerRigidbody.AddForce(new Vector2(0, jetpackForce));
-                    }
                     Vector2 newVelocity = playerRigidbody.velocity;
                     newVelocity.x = forwardMovementSpeed;
                     playerRigidbody.velocity = newVelocity;
-
-                    UpdateGroundedStatus();
-                    AdjustJetpack(jetpackActive);
                 }
+
+                UpdateGroundedStatus();
+                AdjustJetpack(jetpackActive);
             }
             else
             {
@@ -117,6 +119,13 @@ public class StudentController : MonoBehaviour
             distanceTravelled = Mathf.RoundToInt(Vector3.Distance(studentTransform.position, initialPosition));
             totalDistanceTravelledLabel.text = distanceTravelled.ToString() + " m";
         }
+    }
+
+    public void ResumeRunning()
+    {
+        isBossSpawned = false;
+        bossBattleActive = false;
+        RegenHP();
     }
 
     IEnumerator Countdown()
@@ -211,10 +220,63 @@ public class StudentController : MonoBehaviour
                 {
                     ActivateShield();
                     Destroy(collider.gameObject);
+
+                    // Calls ResetEffect after "duration" seconds even if gameObject is inactive
+                    Invoke(nameof(ResetEffect), 6f);
                 }
 
             }
         }
+        else if (collider.gameObject.CompareTag("BulletPhase1"))
+        {
+            if (HasSHield())
+            {
+                DeactivateShield();
+            }
+            else
+            {
+                if(studentHealth > 10)
+                {
+                    studentHealth -= 10;
+                    //studentHP.value = studentHealth;
+                }
+                else
+                {
+                    Die();
+                }
+                
+            }
+        }
+        else if (collider.gameObject.CompareTag("BulletPhase2"))
+        {
+            if (HasSHield())
+            {
+                DeactivateShield();
+            }
+            else
+            {
+                if (studentHealth > 25)
+                {
+                    studentHealth -= 25;
+                    //studentHP.value = studentHealth;
+                }
+                else
+                {
+                    Die();
+                }
+
+            }
+        }
+    }
+
+    private void ResetEffect()
+    {
+      DeactivateShield();
+    }
+
+    void RegenHP()
+    {
+        studentHealth = 100;
     }
 
     void Die()

@@ -9,6 +9,8 @@ TagManager:
   - Coins
   - Shield
   - Puddle
+  - BulletPhase1
+  - BulletPhase2
   layers:
   - Default
   - TransparentFX
