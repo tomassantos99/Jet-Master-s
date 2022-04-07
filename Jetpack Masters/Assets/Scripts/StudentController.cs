@@ -11,6 +11,7 @@ public class StudentController : MonoBehaviour
     public float forwardMovementSpeed = 3.0f;
     public ParticleSystem mainJetpack;
     public ParticleSystem miniJetpack;
+    private bool jetpackActive;
 
     private Rigidbody2D playerRigidbody;
 
@@ -42,6 +43,8 @@ public class StudentController : MonoBehaviour
 
     private ShootingController shootingController;
 
+    public AudioClip coinCollectSound;
+    public AudioSource jetpackAudio;
 
     // Start is called before the first frame update
     void Start()
@@ -56,6 +59,8 @@ public class StudentController : MonoBehaviour
         playerRigidbody = GetComponent<Rigidbody2D>();
         initialPosition = studentTransform.position;
         shootingController = GetComponent<ShootingController>();
+        jetpackActive = false;
+        AdjustJetpackSound(jetpackActive);
 
         DisableSpedUpSprites();
     }
@@ -70,9 +75,10 @@ public class StudentController : MonoBehaviour
     {
         if (running)
         {
+
             if (!studentAnimator.GetBool("isDead"))
             {
-                bool jetpackActive = false;
+                jetpackActive = false;
                 if (distanceTravelled > 20)
                 {
                     bossBattleActive = true;
@@ -115,6 +121,7 @@ public class StudentController : MonoBehaviour
                     UpdateGroundedStatus();
                     AdjustJetpack(jetpackActive);
                 }
+                AdjustJetpackSound(jetpackActive);
             }
             else
             {
@@ -196,6 +203,7 @@ public class StudentController : MonoBehaviour
 
     void CollectCoin(Collider2D coinCollider)
     {
+        AudioSource.PlayClipAtPoint(coinCollectSound, transform.position);
         coins++;
         coinsCollectedLabel.text = coins.ToString();
         Destroy(coinCollider.gameObject);
@@ -215,6 +223,7 @@ public class StudentController : MonoBehaviour
             }
             else
             {
+                collider.gameObject.GetComponent<AudioSource>().Play();
                 Die();
             }
         }
@@ -342,5 +351,18 @@ public class StudentController : MonoBehaviour
 
         writer.Close();
         writer.Dispose();
+    }
+
+    void AdjustJetpackSound(bool jetpackActive)
+    {
+        jetpackAudio.enabled = !studentAnimator.GetBool("isDead") && !isGrounded;
+        if (jetpackActive)
+        {
+            jetpackAudio.volume = 0.1f;
+        }
+        else
+        {
+            jetpackAudio.volume = 0.05f;
+        }
     }
 }

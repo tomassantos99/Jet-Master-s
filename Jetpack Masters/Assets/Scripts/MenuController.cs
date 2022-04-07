@@ -8,6 +8,7 @@ public class MenuController : MonoBehaviour
 {
 
     public string gameScene;
+    public AudioSource newGameSound;
 
     // Start is called before the first frame update
     void Start()
@@ -23,11 +24,21 @@ public class MenuController : MonoBehaviour
 
     public void NewGame()
     {
-        SceneManager.LoadScene(gameScene);
+        StartCoroutine(NewGameRoutine());
     }
 
     public void Exit()
     {
         Application.Quit();
+    }
+
+    private IEnumerator NewGameRoutine()
+    {
+
+        newGameSound.Play();
+
+        yield return new WaitForSeconds(2);
+
+        SceneManager.LoadScene(gameScene);
     }
 }
