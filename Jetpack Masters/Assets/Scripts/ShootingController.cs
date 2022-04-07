@@ -5,10 +5,16 @@ using UnityEngine;
 public class ShootingController : MonoBehaviour {   
     public GameObject ammo;
     public List<GameObject> currentAmmo;
+    public bool freeToShoot;
+    public float shootingCooldown;
+    private bool onCooldown;
+    private float lastShot;
     private Rigidbody2D playerRigidbody;
 
     // Start is called before the first frame update
     void Start() {
+        freeToShoot = true;
+        onCooldown = false;
         playerRigidbody = GetComponent<Rigidbody2D>();
         StartCoroutine(GeneratorCheck());
     }
@@ -16,13 +22,24 @@ public class ShootingController : MonoBehaviour {
     // Update is called once per frame
     void Update() {
         if (Input.GetMouseButtonDown(1)) {
-            GameObject keyboard = (GameObject)Instantiate(ammo);
+            if (freeToShoot && !onCooldown) {
+                GameObject keyboard = (GameObject)Instantiate(ammo);
 
-            Vector3 startPosition = transform.position;
+                Vector3 startPosition = transform.position;
 
-            keyboard.transform.position = new Vector3(startPosition.x + 0.5f, startPosition.y, 0);
+                keyboard.transform.position = new Vector3(startPosition.x + 0.5f, startPosition.y, 0);
 
-            currentAmmo.Add(keyboard);
+                currentAmmo.Add(keyboard);
+
+                onCooldown = true;
+                lastShot = Time.realtimeSinceStartup;
+            }
+            else if(onCooldown) {
+                double timeElapsed = Time.realtimeSinceStartup - lastShot;
+                if (timeElapsed > shootingCooldown) {
+                    onCooldown = false;
+                }
+            }
         }
     }
 
