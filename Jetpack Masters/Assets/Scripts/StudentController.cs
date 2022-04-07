@@ -237,7 +237,11 @@ public class StudentController : MonoBehaviour
             }
             else
             {
-                collider.gameObject.GetComponent<AudioSource>().Play();
+                AudioSource src = collider.gameObject.GetComponent<AudioSource>();
+                if (src != null)
+                {
+                    src.Play();
+                }
                 Die();
             }
         }

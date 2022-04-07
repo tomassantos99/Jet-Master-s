@@ -197,7 +197,7 @@ GameObject:
   - component: {fileID: 3025999427731771236}
   - component: {fileID: 3025999427731771235}
   - component: {fileID: 3025999427731771237}
-  - component: {fileID: -6287616253480822472}
+  - component: {fileID: 3622456976368607516}
   m_Layer: 11
   m_Name: Drone2
   m_TagString: Drone
@@ -323,7 +323,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!82 &-6287616253480822472
+--- !u!82 &3622456976368607516
 AudioSource:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
