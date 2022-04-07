@@ -92,7 +92,10 @@ public class StudentController : MonoBehaviour
 
                 if (distanceTravelled / 60 > spawnedBosses)
                 {
-                    if (spedUp) EndSpeedUp();
+                    if (spedUp)
+                    {
+                        EndSpeedUp();
+                    }
                     playerRigidbody.angularVelocity = 0.0f;
 
                     Instantiate(myPrefab, new Vector2(playerRigidbody.position.x + 10, playerRigidbody.position.y), Quaternion.identity);
@@ -106,16 +109,19 @@ public class StudentController : MonoBehaviour
                     UpdateGroundedStatus();
                     AdjustJetpack(jetpackActive);
                 }
-
-                if (!bossBattleActive || !isBossSpawned)
+                else
                 {
-                    Vector2 newVelocity = playerRigidbody.velocity;
-                    newVelocity.x = forwardMovementSpeed;
-                    playerRigidbody.velocity = newVelocity;
-                }
+                    if (!bossBattleActive || !isBossSpawned)
+                    {
+                        Vector2 newVelocity = playerRigidbody.velocity;
+                        newVelocity.x = forwardMovementSpeed;
+                        playerRigidbody.velocity = newVelocity;
+                    }
 
-                UpdateGroundedStatus();
-                AdjustJetpack(jetpackActive);
+                    UpdateGroundedStatus();
+                    AdjustJetpack(jetpackActive);
+                }
+                
             }
             else
             {
@@ -293,124 +299,124 @@ public class StudentController : MonoBehaviour
             shootingController.freeToShoot = false;
             Destroy(collider.gameObject);
         }
-        }
+    }
 
-        private void ResetEffect()
+    private void ResetEffect()
+    {
+        DeactivateShield();
+    }
+
+    void Die()
+    {
+        studentAnimator.SetBool("isDead", true);
+        playerRigidbody.freezeRotation = false;
+        StartCoroutine(GameOver());
+    }
+
+    void RegenHP()
+    {
+        studentHealth = 100;
+    }
+
+    IEnumerator GameOver()
+    {
+        yield return new WaitForSeconds(2);
+        long score = distanceTravelled + coins;
+        long previousHighscore = ReadPreviousHighScore();
+        if (score > previousHighscore)
         {
-            DeactivateShield();
+            WriteNewHighScore(score);
+            previousHighscore = score;
         }
+        gameOverPanel.transform.Find("Score").gameObject.GetComponent<Text>().text = "Score: " + score;
+        gameOverPanel.transform.Find("High Score").gameObject.GetComponent<Text>().text = "High Score: " + previousHighscore;
+        gameOverPanel.SetActive(true);
+    }
 
-        void Die()
+    void SpeedUpMovement()
+    {
+        double timeElapsed = Time.realtimeSinceStartup - speedUpStart;
+        if (timeElapsed >= 1f)
         {
-            studentAnimator.SetBool("isDead", true);
-            playerRigidbody.freezeRotation = false;
-            StartCoroutine(GameOver());
-        }
-
-        void RegenHP()
-        {
-            studentHealth = 100;
-        }
-
-        IEnumerator GameOver()
-        {
-            yield return new WaitForSeconds(2);
-            long score = distanceTravelled + coins;
-            long previousHighscore = ReadPreviousHighScore();
-            if (score > previousHighscore)
-            {
-                WriteNewHighScore(score);
-                previousHighscore = score;
-            }
-            gameOverPanel.transform.Find("Score").gameObject.GetComponent<Text>().text = "Score: " + score;
-            gameOverPanel.transform.Find("High Score").gameObject.GetComponent<Text>().text = "High Score: " + previousHighscore;
-            gameOverPanel.SetActive(true);
-        }
-
-        void SpeedUpMovement()
-        {
-            double timeElapsed = Time.realtimeSinceStartup - speedUpStart;
-            if (timeElapsed >= 1f)
-            {
-                float Xvel = playerRigidbody.velocity.x;
-                if (Xvel <= 20f)
-                    playerRigidbody.AddForce(new Vector2(50f, 0f));
-                else
-                    playerRigidbody.velocity = new Vector2(40f, 0f);
-
-                if (distanceTravelled - startDistance > 50)
-                {
-                    EndSpeedUp();
-                }
-            }
+            float Xvel = playerRigidbody.velocity.x;
+            if (Xvel <= 20f)
+                playerRigidbody.AddForce(new Vector2(50f, 0f));
             else
-            {
-                float Ypos = playerRigidbody.transform.position.y;
-                if (Ypos > 0.5 || Ypos < -0.5)
-                    playerRigidbody.velocity = new Vector2(playerRigidbody.velocity.x, -1f * (Ypos / Mathf.Abs(Ypos)));
-                else
-                    playerRigidbody.velocity = new Vector2(playerRigidbody.velocity.x, 0f);
-                playerRigidbody.AddForce(new Vector2(-10f, 0f));
+                playerRigidbody.velocity = new Vector2(40f, 0f);
 
-                Vector3 rot = new Vector3(0f, 90f - (90f * (float)timeElapsed), 0f);
-                transform.Find("Wing").gameObject.transform.rotation = Quaternion.Euler(rot);
+            if (distanceTravelled - startDistance > 50)
+            {
+                EndSpeedUp();
             }
         }
-
-        void EnableSpedUpSprites()
+        else
         {
-            transform.Find("SpdShield").gameObject.GetComponent<Renderer>().enabled = true;
-            transform.Find("Wing").gameObject.GetComponent<Renderer>().enabled = true;
+            float Ypos = playerRigidbody.transform.position.y;
+            if (Ypos > 0.5 || Ypos < -0.5)
+                playerRigidbody.velocity = new Vector2(playerRigidbody.velocity.x, -1f * (Ypos / Mathf.Abs(Ypos)));
+            else
+                playerRigidbody.velocity = new Vector2(playerRigidbody.velocity.x, 0f);
+            playerRigidbody.AddForce(new Vector2(-10f, 0f));
+
+            Vector3 rot = new Vector3(0f, 90f - (90f * (float)timeElapsed), 0f);
+            transform.Find("Wing").gameObject.transform.rotation = Quaternion.Euler(rot);
         }
+    }
 
-        void DisableSpedUpSprites()
-        {
-            transform.Find("SpdShield").gameObject.GetComponent<Renderer>().enabled = false;
-            transform.Find("Wing").gameObject.GetComponent<Renderer>().enabled = false;
-        }
+    void EnableSpedUpSprites()
+    {
+        transform.Find("SpdShield").gameObject.GetComponent<Renderer>().enabled = true;
+        transform.Find("Wing").gameObject.GetComponent<Renderer>().enabled = true;
+    }
 
-        void EndSpeedUp()
-        {
-            DisableSpedUpSprites();
-            spedUp = false;
-            playerRigidbody.gravityScale = 1;
-            playerRigidbody.velocity = new Vector2(forwardMovementSpeed, 0f);
-            shootingController.freeToShoot = true;
-        }
+    void DisableSpedUpSprites()
+    {
+        transform.Find("SpdShield").gameObject.GetComponent<Renderer>().enabled = false;
+        transform.Find("Wing").gameObject.GetComponent<Renderer>().enabled = false;
+    }
 
-        private long ReadPreviousHighScore()
+    void EndSpeedUp()
+    {
+        DisableSpedUpSprites();
+        spedUp = false;
+        playerRigidbody.gravityScale = 1;
+        playerRigidbody.velocity = new Vector2(forwardMovementSpeed, 0f);
+        shootingController.freeToShoot = true;
+    }
+
+    private long ReadPreviousHighScore()
+    {
+        string path = Application.persistentDataPath + "/highscore.txt";
+        try
         {
-            string path = Application.persistentDataPath + "/highscore.txt";
-            try
-            {
-                StreamReader reader = new StreamReader(path);
-                string fileContent = reader.ReadToEnd().Trim();
-                if (string.IsNullOrEmpty(fileContent))
-                {
-                    return 0;
-                }
-                long highScore = long.Parse(fileContent);
-                reader.Close();
-                reader.Dispose();
-                return highScore;
-            }
-            catch (FileNotFoundException)
+            StreamReader reader = new StreamReader(path);
+            string fileContent = reader.ReadToEnd().Trim();
+            if (string.IsNullOrEmpty(fileContent))
             {
                 return 0;
             }
-            finally
-            {
-            }
+            long highScore = long.Parse(fileContent);
+            reader.Close();
+            reader.Dispose();
+            return highScore;
         }
-
-        private void WriteNewHighScore(long newHighScore)
+        catch (FileNotFoundException)
         {
-            string path = Application.persistentDataPath + "/highscore.txt";
-
-            StreamWriter writer = new StreamWriter(path, false);
-            writer.Write(newHighScore.ToString());
-
-            writer.Close();
-            writer.Dispose();
+            return 0;
+        }
+        finally
+        {
         }
     }
+
+    private void WriteNewHighScore(long newHighScore)
+    {
+        string path = Application.persistentDataPath + "/highscore.txt";
+
+        StreamWriter writer = new StreamWriter(path, false);
+        writer.Write(newHighScore.ToString());
+
+        writer.Close();
+        writer.Dispose();
+    }
+}
