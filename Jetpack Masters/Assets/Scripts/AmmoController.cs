@@ -16,13 +16,13 @@ public class AmmoController : MonoBehaviour
         for (int i = 0; i < 4; i++) {
             if (i != sprite)
                 transform.GetChild(i).gameObject.GetComponent<Renderer>().enabled = false;
-        } 
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     void FixedUpdate() {
@@ -36,5 +36,6 @@ public class AmmoController : MonoBehaviour
         if (collider.gameObject.CompareTag("Drone")){
            gameObject.transform.position = new Vector3(0f,100f,0f);
         }
+        Destroy(gameObject);
     }
 }

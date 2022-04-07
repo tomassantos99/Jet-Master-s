@@ -11,6 +11,8 @@ TagManager:
   - Puddle
   - Drone
   - Can
+  - BulletPhase1
+  - BulletPhase2
   layers:
   - Default
   - TransparentFX

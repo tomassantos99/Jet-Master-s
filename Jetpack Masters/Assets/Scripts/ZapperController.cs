@@ -54,6 +54,17 @@ public class ZapperController : MonoBehaviour {
                 currentZappers.Add(zap);
             }
         }
+
+        if (currentZappers.Count == 0 && !studentController.bossBattleActive)
+        {
+            currentPosition = transform.position.x + 15f;
+            for (int i = 0; i < 3; i++)
+            {
+                GameObject newZap = GenerateZapper();
+
+                currentZappers.Add(newZap);
+            }
+        }
     }
 
     GameObject GenerateZapper() {

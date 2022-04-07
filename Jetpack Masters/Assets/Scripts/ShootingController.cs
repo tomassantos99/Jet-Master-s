@@ -2,7 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ShootingController : MonoBehaviour {   
+public class ShootingController : MonoBehaviour
+{
     public GameObject ammo;
     public List<GameObject> currentAmmo;
     public bool freeToShoot;
@@ -14,7 +15,8 @@ public class ShootingController : MonoBehaviour {
     public AudioClip throwSound;
 
     // Start is called before the first frame update
-    void Start() {
+    void Start()
+    {
         freeToShoot = true;
         onCooldown = false;
         playerRigidbody = GetComponent<Rigidbody2D>();
@@ -38,29 +40,49 @@ public class ShootingController : MonoBehaviour {
                 onCooldown = true;
                 lastShot = Time.realtimeSinceStartup;
             }
-            else if(onCooldown) {
+            else if (onCooldown)
+            {
                 double timeElapsed = Time.realtimeSinceStartup - lastShot;
-                if (timeElapsed > shootingCooldown) {
+                if (timeElapsed > shootingCooldown)
+                {
                     onCooldown = false;
                 }
             }
         }
     }
 
-    private IEnumerator GeneratorCheck() {
-        while (true) {
+    private IEnumerator GeneratorCheck()
+    {
+        while (true)
+        {
             List<GameObject> ammoToRemove = new List<GameObject>();
-            foreach (var ammo in currentAmmo) {
-                float playerX = transform.position.x;
-                float lastAmmoX = ammo.transform.position.x;
-                float ammoY = ammo.transform.position.y;
-                if(playerX - lastAmmoX < -10 || ammoY > 50) {
-                    ammoToRemove.Add(ammo);
+            foreach (var ammo in currentAmmo)
+            {
+                if (ammo != null)
+                {
+                    float playerX = transform.position.x;
+                    float lastAmmoX = ammo.transform.position.x;
+                    float ammoY = ammo.transform.position.y;
+
+
+                    if (playerX - lastAmmoX < -10 || ammoY > 50)
+                    {
+                        ammoToRemove.Add(ammo);
+                    }
                 }
+
+
             }
-            foreach (var ammo in ammoToRemove) {
+
+            foreach (var ammo in ammoToRemove)
+            {
                 currentAmmo.Remove(ammo);
-                Destroy(ammo);
+
+                if (ammo != null)
+                {
+                    
+                    Destroy(ammo);
+                }
             }
             yield return new WaitForSeconds(0.25f);
         }
