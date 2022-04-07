@@ -27,6 +27,7 @@ public class StudentController : MonoBehaviour
     private Vector3 initialPosition;
     private int distanceTravelled;
     public Text totalDistanceTravelledLabel;
+    private float lastPosition = 0f;
 
     public bool bossBattleActive;
     public bool isBossSpawned;
@@ -78,9 +79,9 @@ public class StudentController : MonoBehaviour
     {
         if (running)
         {
-
             if (!studentAnimator.GetBool("isDead"))
             {
+                checkSpeed();
                 jetpackActive = false;
 
                 jetpackActive = Input.GetButton("Fire1");
@@ -439,5 +440,19 @@ public class StudentController : MonoBehaviour
         {
             jetpackAudio.volume = 0.05f;
         }
+    }
+
+    private void checkSpeed()
+    {
+
+        if (lastPosition == gameObject.transform.position.x)
+        {
+            studentAnimator.SetBool("isMoving", false);
+        }
+        else
+        {
+            studentAnimator.SetBool("isMoving", true);
+        }
+        lastPosition = gameObject.transform.position.x;
     }
 }
