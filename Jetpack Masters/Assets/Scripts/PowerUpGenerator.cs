@@ -19,6 +19,7 @@ public class PowerUpGenerator : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Random.InitState((int)System.DateTime.Now.Ticks);
         float height = 2.0f * Camera.main.orthographicSize;
         screenWidthInPoints = height * Camera.main.aspect;
         currentPowerUps = new List<GameObject>();
