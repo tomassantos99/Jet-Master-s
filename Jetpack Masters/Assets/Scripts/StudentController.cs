@@ -46,8 +46,11 @@ public class StudentController : MonoBehaviour
 
     public AudioClip coinCollectSound;
     public AudioSource jetpackAudio;
-    public int studentHealth = 30;
+    public int studentHealth = 100;
     public int spawnedBosses = 0;
+
+    public GameObject playerHP;
+    public Slider healthBar;
 
 
     // Start is called before the first frame update
@@ -67,6 +70,8 @@ public class StudentController : MonoBehaviour
         AdjustJetpackSound(jetpackActive);
 
         DisableSpedUpSprites();
+        playerHP = GameObject.Find("Canvas").transform.Find("PlayerHP").gameObject;
+        
     }
 
     // Update is called once per frame
@@ -106,6 +111,9 @@ public class StudentController : MonoBehaviour
                     playerRigidbody.angularVelocity = 0.0f;
 
                     Instantiate(myPrefab, new Vector2(playerRigidbody.position.x + 10, playerRigidbody.position.y), Quaternion.identity);
+                    playerHP.SetActive(true);
+                    healthBar = playerHP.GetComponent<Slider>();
+                    healthBar.value = studentHealth;
                     isBossSpawned = true;
                     spawnedBosses++;
                 }
@@ -120,6 +128,7 @@ public class StudentController : MonoBehaviour
                 {
                     if (!bossBattleActive || !isBossSpawned)
                     {
+                        playerHP.SetActive(false);
                         Vector2 newVelocity = playerRigidbody.velocity;
                         newVelocity.x = forwardMovementSpeed;
                         playerRigidbody.velocity = newVelocity;
@@ -269,10 +278,11 @@ public class StudentController : MonoBehaviour
                 {
                     studentHealth -= 10;
                     StartCoroutine(DamageAnimation());
-                    //studentHP.value = studentHealth;
+                    healthBar.value = studentHealth;
                 }
                 else
                 {
+                    healthBar.value = 0;
                     Die();
                 }
 
@@ -290,10 +300,11 @@ public class StudentController : MonoBehaviour
                 {
                     studentHealth -= 25;
                     StartCoroutine(DamageAnimation());
-                    //studentHP.value = studentHealth;
+                    healthBar.value = studentHealth;
                 }
                 else
                 {
+                    healthBar.value = 0;
                     Die();
                 }
 

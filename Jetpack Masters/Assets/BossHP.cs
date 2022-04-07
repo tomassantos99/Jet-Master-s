@@ -64,8 +64,12 @@ public class BossHP : MonoBehaviour
 
 	void OnTriggerEnter2D(Collider2D hitInfo)
 	{
-		TakeDamage(10);
-		healthBar.value = health;
+		if (hitInfo.gameObject.CompareTag("Ammo"))
+		{
+			TakeDamage(10);
+			healthBar.value = health;
+		}
+		
 	}
 
 	IEnumerator DestroyBoss(GameObject boss)
