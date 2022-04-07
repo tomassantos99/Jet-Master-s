@@ -172,7 +172,7 @@ public class Generator : MonoBehaviour
         if (farthestObjectX < addObjectX)
         {
 
-            AddObject(farthestObjectX);
+            AddObject(addObjectX);
         }
     }
 }
