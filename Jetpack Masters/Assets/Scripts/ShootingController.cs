@@ -12,6 +12,8 @@ public class ShootingController : MonoBehaviour
     private float lastShot;
     private Rigidbody2D playerRigidbody;
 
+    public AudioClip throwSound;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -22,12 +24,11 @@ public class ShootingController : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
-    {
-        if (Input.GetMouseButtonDown(1))
-        {
-            if (freeToShoot && !onCooldown)
-            {
+    void Update() {
+        if (Input.GetMouseButtonDown(1)) {
+            if (freeToShoot && !onCooldown) {
+                AudioSource.PlayClipAtPoint(throwSound, transform.position);
+
                 GameObject keyboard = (GameObject)Instantiate(ammo);
 
                 Vector3 startPosition = transform.position;
