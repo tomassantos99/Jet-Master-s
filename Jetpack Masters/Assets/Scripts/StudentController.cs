@@ -268,6 +268,7 @@ public class StudentController : MonoBehaviour
                 if (studentHealth > 10)
                 {
                     studentHealth -= 10;
+                    StartCoroutine(DamageAnimation());
                     //studentHP.value = studentHealth;
                 }
                 else
@@ -288,6 +289,7 @@ public class StudentController : MonoBehaviour
                 if (studentHealth > 25)
                 {
                     studentHealth -= 25;
+                    StartCoroutine(DamageAnimation());
                     //studentHP.value = studentHealth;
                 }
                 else
@@ -325,6 +327,32 @@ public class StudentController : MonoBehaviour
     void RegenHP()
     {
         studentHealth = 100;
+    }
+
+    IEnumerator DamageAnimation()
+    {
+        SpriteRenderer[] srs = GetComponentsInChildren<SpriteRenderer>();
+
+        for (int i = 0; i < 3; i++)
+        {
+            foreach (SpriteRenderer sr in srs)
+            {
+                Color c = sr.color;
+                c.a = 0;
+                sr.color = c;
+            }
+
+            yield return new WaitForSeconds(.1f);
+
+            foreach (SpriteRenderer sr in srs)
+            {
+                Color c = sr.color;
+                c.a = 1;
+                sr.color = c;
+            }
+
+            yield return new WaitForSeconds(.1f);
+        }
     }
 
     IEnumerator GameOver()
