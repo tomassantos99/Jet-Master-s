@@ -5611,6 +5611,7 @@ MonoBehaviour:
   - {fileID: 5860223087330916359, guid: 5741982b9888bc647bd5480380863bfe, type: 3}
   - {fileID: 5690214037121062289, guid: 408ffd9b926442648bca6bde013d4500, type: 3}
   objects: []
+  nonBossObjects: []
   objectsMinDistance: 5
   objectsMaxDistance: 10
   objectsMinY: -1.4
