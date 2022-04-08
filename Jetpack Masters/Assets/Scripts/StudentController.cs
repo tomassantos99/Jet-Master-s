@@ -52,7 +52,7 @@ public class StudentController : MonoBehaviour
     public GameObject playerHP;
     public Slider healthBar;
 
-    public int bossSpawnDistance = 50;
+    public int bossSpawnDistance = 200;
     private bool disableJetpack = false;
 
     private bool immune = false;
