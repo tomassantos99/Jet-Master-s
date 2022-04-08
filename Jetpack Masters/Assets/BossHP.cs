@@ -20,6 +20,7 @@ public class BossHP : MonoBehaviour
 
 	public Slider healthBar;
 
+	public AudioSource bossExplosionSound;
 
 
 	void Awake()
@@ -60,6 +61,7 @@ public class BossHP : MonoBehaviour
 	{
 		GetComponent<Animator>().SetBool("IsDeath", true);
 		StartCoroutine(DestroyBoss(gameObject));
+		bossExplosionSound.Play();
 	}
 
 	void OnTriggerEnter2D(Collider2D hitInfo)

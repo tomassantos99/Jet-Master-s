@@ -12,6 +12,8 @@ public class Drone2Controller : MonoBehaviour
     private Animator droneAnimator;
     private Collider2D droneCollider;
     public GameObject explosion;
+
+    public AudioSource explosionSound;
     // Start is called before the first frame update
     void Start()
     {
@@ -58,6 +60,7 @@ public class Drone2Controller : MonoBehaviour
 
     void Die() {
         droneAnimator.SetBool("isDead", true);
+        explosionSound.Play();
         transform.GetChild(1).gameObject.GetComponent<Renderer>().enabled = false;
         tag = "Untagged";
     }
