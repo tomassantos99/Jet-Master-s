@@ -10,11 +10,9 @@ public class BossHP : MonoBehaviour
 
 	public int health = 100;
 
-	public GameObject deathEffect;
 
 	public bool isInvulnerable = false;
 
-	public GameObject prefabHP;
 
 	public GameObject bossHP;
 
@@ -26,9 +24,13 @@ public class BossHP : MonoBehaviour
 	void Awake()
     {
 		bossHP = GameObject.Find("Canvas").transform.Find("BossHP").gameObject;
+
+		//Make the hp bar appear on the screen
 		bossHP.SetActive(true);
 		healthBar = bossHP.GetComponent<Slider>();
 		studentController = GameObject.Find("Student").GetComponent<StudentController>();
+
+		// Set the bar to max health
 		healthBar.value = health;
 	}
 
@@ -53,6 +55,7 @@ public class BossHP : MonoBehaviour
 		if (health <= 0)
 		{
 			Die();
+			// Remove the HP bar from the screen
 			bossHP.SetActive(false);
 		}
 	}
@@ -76,11 +79,13 @@ public class BossHP : MonoBehaviour
 
 	IEnumerator DestroyBoss(GameObject boss)
     {
+		// Wait for the animation to finish
 		yield return new WaitForSeconds(3.5f);
 		Destroy(boss);
 		studentController.ResumeRunning();
     }
 
+	// Make the boss blink when hit by a shot
 	IEnumerator DamageAnimation()
 	{
 		SpriteRenderer[] srs = GetComponentsInChildren<SpriteRenderer>();

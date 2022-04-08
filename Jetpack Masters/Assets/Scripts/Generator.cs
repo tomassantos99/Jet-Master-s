@@ -6,6 +6,8 @@ using System.Text.RegularExpressions;
 public class Generator : MonoBehaviour
 {
     StudentController studentController;
+
+    //Needs access to this object so it can check variables from its scripts
     [SerializeField] GameObject student;
 
     public GameObject[] availableRooms;
@@ -108,6 +110,7 @@ public class Generator : MonoBehaviour
         {
             GenerateRoomIfRequired();
 
+            // If the player is the middle of a battle with a boss there is no need to generate new objects
             if (!studentController.bossBattleActive)
             {
                 GenerateObjectsIfRequired();
@@ -171,6 +174,7 @@ public class Generator : MonoBehaviour
 
         }
 
+        // Remove objects that are to the left of the player and out of the game scene
         foreach (var obj in objectsToRemove)
         {
             objects.Remove(obj);

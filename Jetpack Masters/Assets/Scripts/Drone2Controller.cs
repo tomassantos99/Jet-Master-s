@@ -10,7 +10,6 @@ public class Drone2Controller : MonoBehaviour
     private Rigidbody2D droneRigidbody;
     private Rigidbody2D studentRigidbody;
     private Animator droneAnimator;
-    private Collider2D droneCollider;
     public GameObject explosion;
 
     public AudioSource explosionSound;
@@ -37,6 +36,7 @@ public class Drone2Controller : MonoBehaviour
 
         if(!droneAnimator.GetBool("isDead")) {
         float playerDistance = studentRigidbody.transform.position.x - transform.position.x;
+            // if the drone is close to the player
             if(Mathf.Abs(playerDistance) < 0.5f) {
                 Die();
                 GameObject expl = (GameObject)Instantiate(explosion);
@@ -49,6 +49,7 @@ public class Drone2Controller : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collider)
     {
+        // Destroy the drone if the player shoots it
         if (collider.gameObject.CompareTag("Ammo")) {
             hitpoints--;
             if (hitpoints == 0) {

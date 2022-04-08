@@ -6,8 +6,6 @@ public class PowerUpScript : MonoBehaviour
 {
 
     public bool activateShield;
-    public bool activateTripleShootingGun;
-    public bool activateExtraSpeed;
 
     // Start is called before the first frame update
     void Start()

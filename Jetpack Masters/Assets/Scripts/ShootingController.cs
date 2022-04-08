@@ -10,7 +10,6 @@ public class ShootingController : MonoBehaviour
     public float shootingCooldown;
     private bool onCooldown;
     private float lastShot;
-    private Rigidbody2D playerRigidbody;
 
     public AudioClip throwSound;
 
@@ -19,7 +18,6 @@ public class ShootingController : MonoBehaviour
     {
         freeToShoot = true;
         onCooldown = false;
-        playerRigidbody = GetComponent<Rigidbody2D>();
         StartCoroutine(GeneratorCheck());
     }
 

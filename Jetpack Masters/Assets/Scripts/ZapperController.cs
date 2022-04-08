@@ -9,7 +9,6 @@ public class ZapperController : MonoBehaviour {
     public List<GameObject> zappers;
     public List<GameObject> currentZappers;
     public float currentPosition;
-    private Animator playerAnimator;
 
     void Awake()
     {
@@ -27,7 +26,6 @@ public class ZapperController : MonoBehaviour {
             currentZappers.Add(zap);
         }
 
-        playerAnimator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -55,6 +53,7 @@ public class ZapperController : MonoBehaviour {
             }
         }
 
+        // Generate new zappers after each boss fight
         if (currentZappers.Count == 0 && !studentController.bossBattleActive)
         {
             currentPosition = transform.position.x + 15f;

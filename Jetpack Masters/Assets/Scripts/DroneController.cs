@@ -12,7 +12,6 @@ public class DroneController : MonoBehaviour
     private Rigidbody2D droneRigidbody;
     private Rigidbody2D studentRigidbody;
     private Animator droneAnimator;
-    private Collider2D droneCollider;
     // Start is called before the first frame update
     void Start()
     {
@@ -21,7 +20,6 @@ public class DroneController : MonoBehaviour
         droneRigidbody = GetComponent<Rigidbody2D>();
         studentRigidbody = student.GetComponent<Rigidbody2D>();
         droneAnimator = transform.GetChild(0).gameObject.GetComponent<Animator>();
-        droneCollider = GetComponent<Collider2D>();
     }
 
     // Update is called once per frame

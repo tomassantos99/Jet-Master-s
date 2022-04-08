@@ -10,7 +10,6 @@ public class PuddleGenerator : MonoBehaviour
     [SerializeField] GameObject student;
     public List<GameObject> puddles;
     private List<GameObject> currentPuddles;
-    private float currentPosition;
 
     void Awake()
     {
