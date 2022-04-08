@@ -112,11 +112,13 @@ public class StudentController : MonoBehaviour
 
                 if ((distanceTravelled + 10) / bossSpawnDistance > spawnedBosses)
                 {
+                    // Block the jetpack until the boss spawns
                     StartCoroutine(JetpackOff(3));
                 }
 
                 if (distanceTravelled / bossSpawnDistance > spawnedBosses)
                 {
+                    // Spawn the boss
                     Instantiate(myPrefab, new Vector2(playerRigidbody.position.x + 10, playerRigidbody.position.y), Quaternion.identity);
                     playerHP.SetActive(true);
                     healthBar = playerHP.GetComponent<Slider>();
@@ -127,6 +129,7 @@ public class StudentController : MonoBehaviour
 
                 else if (spedUp)
                 {
+                    // Activate the energy drink power-up
                     SpeedUpMovement();
                     UpdateGroundedStatus();
                     AdjustJetpack(jetpackActive);
@@ -135,6 +138,7 @@ public class StudentController : MonoBehaviour
                 {
                     if (!bossBattleActive || !isBossSpawned)
                     {
+                        // Resume player speed after battle
                         playerHP.SetActive(false);
                         Vector2 newVelocity = playerRigidbody.velocity;
                         newVelocity.x = forwardMovementSpeed;
@@ -148,6 +152,8 @@ public class StudentController : MonoBehaviour
             }
             else
             {
+
+                // Turn the jetpack off if the player dies
                 var mainJetpackEmission = mainJetpack.emission;
                 var miniJetpackEmission = miniJetpack.emission;
                 mainJetpackEmission.enabled = false;
