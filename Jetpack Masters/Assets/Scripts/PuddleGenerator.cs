@@ -57,7 +57,7 @@ public class PuddleGenerator : MonoBehaviour
     GameObject GeneratePuddle()
     {
         GameObject puddle = (GameObject)Instantiate(puddles[Random.Range(0, puddles.Count)]);
-        float puddleX = transform.position.x + Random.Range(10, 34);
+        float puddleX = transform.position.x + Random.Range(10, 24);
 
         puddle.transform.position = new Vector3(puddleX, -3.05f, 0.0f);
 

@@ -52,6 +52,10 @@ public class StudentController : MonoBehaviour
     public GameObject playerHP;
     public Slider healthBar;
 
+    public int bossSpawnDistance = 50;
+    private bool disableJetpack = false;
+
+    private bool immune = false;
 
     // Start is called before the first frame update
     void Start()
@@ -89,27 +93,30 @@ public class StudentController : MonoBehaviour
                 checkSpeed();
                 jetpackActive = false;
 
-                jetpackActive = Input.GetButton("Fire1");
+                jetpackActive = Input.GetButton("Fire1") && !disableJetpack;
 
                 if (jetpackActive)
                 {
                     playerRigidbody.AddForce(new Vector2(0, jetpackForce));
                 }
 
-                if ((distanceTravelled + 30) / 200 > spawnedBosses)
-                {
-                    bossBattleActive = true;
-                }
-
-
-                if (distanceTravelled / 200 > spawnedBosses)
+                if ((distanceTravelled + 30) / bossSpawnDistance > spawnedBosses)
                 {
                     if (spedUp)
                     {
                         EndSpeedUp();
+                        StartCoroutine(Immune(2));
                     }
-                    playerRigidbody.angularVelocity = 0.0f;
+                    bossBattleActive = true;
+                }
 
+                if ((distanceTravelled + 10) / bossSpawnDistance > spawnedBosses)
+                {
+                    StartCoroutine(JetpackOff(3));
+                }
+
+                if (distanceTravelled / bossSpawnDistance > spawnedBosses)
+                {
                     Instantiate(myPrefab, new Vector2(playerRigidbody.position.x + 10, playerRigidbody.position.y), Quaternion.identity);
                     playerHP.SetActive(true);
                     healthBar = playerHP.GetComponent<Slider>();
@@ -165,6 +172,20 @@ public class StudentController : MonoBehaviour
         RegenHP();
     }
 
+    IEnumerator Immune(int seconds)
+    {
+        immune = true;
+        yield return new WaitForSeconds(seconds);
+        immune = false;
+    }
+
+    IEnumerator JetpackOff(int seconds)
+    {
+        disableJetpack = true;
+        yield return new WaitForSeconds(seconds);
+        disableJetpack = false;
+    }
+
     IEnumerator Countdown()
     {
         gameObject.GetComponent<Rigidbody2D>().gravityScale = 0;
@@ -195,7 +216,7 @@ public class StudentController : MonoBehaviour
 
     bool HasSHield()
     {
-        return shield.activeSelf;
+        return shield.activeSelf || immune;
     }
 
     void UpdateGroundedStatus()
